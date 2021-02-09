@@ -3,6 +3,7 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerLayout"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -22,8 +23,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </FrameLayout>
-        <include
-            layout="@layout/bottom"/>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:tabIndicatorHeight="0dp"
+            app:tabBackground="@android:color/transparent"
+            app:tabRippleColor="@android:color/transparent"/>
+
     </LinearLayout>
     <!--侧滑界面,必须设置layout_gravity属性,表示侧滑方向-->
     <LinearLayout
