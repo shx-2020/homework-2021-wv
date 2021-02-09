@@ -32,8 +32,9 @@ public class InnerActivity extends AppCompatActivity {
         data = getIntent().getStringExtra("data");
     }
 
-    private void initViews(){
+    private void initViews() {
         mPagerAdapter = new PagerAdapter() {
+
             @Override
             public int getCount() {
                 return 0;
@@ -43,6 +44,6 @@ public class InnerActivity extends AppCompatActivity {
             public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
                 return false;
             }
-        }
+        };
     }
 }
