@@ -3,16 +3,24 @@ package xyz.imaginarycrisis.wanandroidapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class InnerActivity extends AppCompatActivity {
-    String data;
-    Intent intent;
-    PagerAdapter mPagerAdapter;
+    private ViewPager viewPager;
+    private MenuItem menuItem;
+    private BottomNavigationView bottomNavigationView;
+
+    private String data;
+    private Intent intent;
+    private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +40,11 @@ public class InnerActivity extends AppCompatActivity {
         data = getIntent().getStringExtra("data");
     }
 
-    private void initViews() {
-        mPagerAdapter = new PagerAdapter() {
+    private void initBottomNavigationView(){
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
-            @Override
-            public int getCount() {
-                return 0;
-            }
+    }
+    private void initViewPager(){
 
-            @Override
-            public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-                return false;
-            }
-        };
     }
 }
