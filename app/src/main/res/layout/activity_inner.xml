@@ -8,24 +8,79 @@
     tools:context=".MainActivity">
     <!--主界面，主内容区的布局代码要放在侧滑菜单布局的前面-->
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!--这里我就放了个自定义的布局，其他啥也没放，所以就只有一个顶部栏-->
-        <include layout="@layout/top_view_bar"
-            android:id="@+id/top_view_bar"/>
+        <include layout="@layout/top_view_bar"/>
+        <FrameLayout
+            android:id="@+id/id_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <androidx.viewpager.widget.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </FrameLayout>
+        <include
+            layout="@layout/bottom"/>
     </LinearLayout>
     <!--侧滑界面,必须设置layout_gravity属性,表示侧滑方向-->
     <LinearLayout
         android:layout_gravity="start"
         android:id="@+id/ll"
-        android:background="@android:color/darker_gray"
+        android:background="@android:color/holo_orange_light"
         android:orientation="vertical"
         android:layout_width="300dp"
         android:layout_height="match_parent">
-        <TextView
+        <LinearLayout
+            android:background="@android:color/holo_orange_dark"
+            android:elevation="20sp"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="侧滑菜单"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20sp"
+                />
+            <TextView
+                android:textColor="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:text="我的信息"
+                android:gravity="center"
+                android:layout_gravity="center"
+                tools:ignore="HardcodedText" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20sp"
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="75sp"/>
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="昵称"/>
+
+        <ImageButton
+            android:elevation="20sp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="50dp"/>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            />
     </LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

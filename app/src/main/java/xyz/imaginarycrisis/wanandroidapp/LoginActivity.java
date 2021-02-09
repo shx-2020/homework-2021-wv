@@ -35,6 +35,7 @@ import javax.net.ssl.HttpsURLConnection;
 import static android.widget.Toast.LENGTH_SHORT;
 
 public class LoginActivity extends AppCompatActivity {
+    private Button touristButton;
     private EditText etUsername;
     private EditText etPassword;
     private TextView tvNoAccount;
@@ -60,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initViews(){
+        touristButton = findViewById(R.id.tourist_login_button);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
         tvNoAccount = findViewById(R.id.no_account);
@@ -101,6 +103,13 @@ public class LoginActivity extends AppCompatActivity {
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.parseColor("#0000FF"));
         style.setSpan(foregroundColorSpan, 5, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvNoAccount.setMovementMethod(LinkMovementMethod.getInstance());
+
+        touristButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InnerActivity.activityStart("",thisLoginActivity);
+            }
+        });
     }
 
     private void requestLogin(HashMap<String,String> params){

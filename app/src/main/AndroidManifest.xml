@@ -11,7 +11,7 @@
         android:networkSecurityConfig="@xml/network_cfg"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WanAnndroidApp">
+        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         <activity android:name=".InnerActivity"></activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
