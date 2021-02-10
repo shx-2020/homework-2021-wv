@@ -82,6 +82,7 @@
             android:text="昵称"/>
 
         <ImageButton
+            android:id="@+id/innerAvatarImageButton"
             android:elevation="20sp"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -91,12 +92,14 @@
             android:layout_width="0dp"
             android:layout_height="50dp"/>
         <TextView
+            android:id="@+id/drawer_info_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="20sp"
             android:text="ID：获取中"/>
         <TextView
+            android:id="@+id/drawer_info_coin"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -110,6 +113,7 @@
          </LinearLayout>
 
         <Button
+            android:id="@+id/about_page_btn"
             android:background="@android:color/transparent"
             android:textSize="25dp"
             android:layout_gravity="bottom"

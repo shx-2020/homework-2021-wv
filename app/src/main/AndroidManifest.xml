@@ -12,6 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+        <activity android:name=".AboutPage"></activity>
+        <activity android:name=".DetailedInfo" />
         <activity android:name=".InnerActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />

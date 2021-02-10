@@ -7,46 +7,112 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.InputStream;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+
 public class InnerActivity extends AppCompatActivity {
+    //DrawerLayout对象声明
+    private Handler mHandlerForAvatar = new Handler(){
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            avatarMap = (Bitmap)msg.obj;
+
+            avatarImageButton.setImageBitmap(avatarMap);
+        }
+    };//自定义Handler用于接收头像bitmap，前文（误）详见fillAvatarImage()方法
+    private Bitmap avatarMap;//头像bitmap
+    TextView drawerInfoID;
+    TextView drawerInfoCoin;
+    Button drawerAboutBtn;
+    private ImageButton avatarImageButton;
+
+    //json形式的用户资料
+    private DecodedLoginData decodedLoginData;
+
+    //主页面对象声明
     private ViewPager viewPager;
     private MenuItem menuItem;
     private BottomNavigationView bottomNavigationView;
 
-    private String data;
-    private Intent intent;
-    private PagerAdapter mPagerAdapter;
 
+    //json
+    private String data;
+
+    //为了方便，定义一个context指向这个活动所指向的对象
+    private final Context thisInnerActivity = InnerActivity.this;
+
+    private PagerAdapter mPagerAdapter;
+    //onCreate方法
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inner);
 
         getAccountData();
+        initDrawerExceptAvatarImage();
+        fillAvatarImage();
     }
-
+    //隐式启动本活动方法
     public static void activityStart(String responseData, Context context){
         Intent intent = new Intent(context, InnerActivity.class);
         intent.putExtra("data",responseData);
         context.startActivity(intent);
     }
-
+    //获得json以及解码的用户信息的方法
     private void getAccountData(){
         data = getIntent().getStringExtra("data");
+        decodedLoginData = DecodedLoginData.spawnDecodedJsonData(data);
+    }
+    //初始化drawer（除了头像照片，但还是初始化了头像的其他内容）
+    private void initDrawerExceptAvatarImage(){
+        avatarImageButton = findViewById(R.id.innerAvatarImageButton);
+        drawerInfoID = findViewById(R.id.drawer_info_id);
+        drawerInfoCoin = findViewById(R.id.drawer_info_coin);
+        drawerAboutBtn = findViewById(R.id.about_page_btn);
+
+
     }
 
-    private void initBottomNavigationView(){
-        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+    //加载头像的图像（耗时任务，用了多线程和handler）
+    private void fillAvatarImage(){
 
+        Runnable networkGetAvatar = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(decodedLoginData.getIcon());
+                    HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+                    connection.setReadTimeout(10000);
+                    connection.setConnectTimeout(10000);
+                    connection.setDoInput(true);
+                    connection.setUseCaches(false);
+                    InputStream in = connection.getInputStream();
+                    Bitmap bitmap = BitmapFactory.decodeStream(in);
+                    in.close();
+                    Message messageInRunnable = new Message();
+                    messageInRunnable.obj = bitmap;
+                    mHandlerForAvatar.handleMessage(messageInRunnable);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        };//定义获得bitmap的runnable
+        new Thread(networkGetAvatar).start();//开始调用这个runnable的线程
     }
-    private void initViewPager(){
-
-    }
-
 
 }
