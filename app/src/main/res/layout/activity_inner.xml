@@ -25,13 +25,15 @@
                 android:layout_height="match_parent"/>
         </FrameLayout>
         <com.google.android.material.bottomnavigation.BottomNavigationView
-
+            app:elevation="20sp"
+            app:itemTextColor="@color/black"
+            app:itemBackground="@android:color/darker_gray"
             android:id="@+id/bottom_navigation_view"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             app:tabIndicatorHeight="0dp"
             app:tabBackground="@android:color/transparent"
-            app:tabRippleColor="@android:color/transparent"
+            app:tabRippleColor="@android:color/holo_orange_light"
             app:menu="@menu/menu_items"
             />
 
@@ -88,10 +90,36 @@
         <View
             android:layout_width="0dp"
             android:layout_height="50dp"/>
-        <ListView
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="ID：获取中"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="硬币：获取中"/>
+        <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+         </LinearLayout>
+
+        <Button
+            android:background="@android:color/transparent"
+            android:textSize="25dp"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="关于" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
     </LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -47,4 +47,6 @@ public class InnerActivity extends AppCompatActivity {
     private void initViewPager(){
 
     }
+
+
 }
