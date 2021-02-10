@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -68,16 +70,38 @@ public class InnerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inner);
 
-        initUIViews("首页");
+        initTopBarViews("玩Android",R.id.inner_top_view_bar_layout);
         getAccountData();
         initDrawerExceptAvatarImage();
         fillAvatarImage();
     }
     //初始化UI界面
-    private void initUIViews(String title){
-        this.title = findViewById(R.id.inner_top_view_bar_layout).findViewById(R.id.top_view_bar_title);
-        this.title.setText(title);
+    private void initTopBarViews(String title, int tarLayoutId){
+        Activity thisActivity = this;
+        TextView titleTv;
+        titleTv = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_title);
+        titleTv.setText(title);
         StatusBarUtils.setWindowStatusBarColor(this,R.color.orange_for_top_view_bar);
+        Button btnBack = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_back_button);
+        TextView tvRefresh = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_refresh);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                thisActivity.finish();
+            }
+        });
+        tvRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        //刷新方法
+                    }
+                }.run();
+                Toast.makeText(thisActivity,"已刷新",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     //隐式启动本活动方法
     public static void activityStart(String responseData, Context context){
