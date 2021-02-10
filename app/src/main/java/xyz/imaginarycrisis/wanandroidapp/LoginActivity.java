@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView tvNoAccount;
     private Button loginButton;
     private Context thisLoginActivity;
-    private Intent intent;
     String responseData;
     private MHandler mHandler = new MHandler();
 

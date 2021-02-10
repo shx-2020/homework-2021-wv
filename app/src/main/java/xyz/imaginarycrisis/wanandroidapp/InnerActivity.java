@@ -32,14 +32,15 @@ public class InnerActivity extends AppCompatActivity {
             super.handleMessage(msg);
             avatarMap = (Bitmap)msg.obj;
 
-            avatarImageButton.setImageBitmap(avatarMap);
+            avatarImageButton.setImageBitmap(avatarMap);//正式设置头像按钮的图像
         }
     };//自定义Handler用于接收头像bitmap，前文（误）详见fillAvatarImage()方法
     private Bitmap avatarMap;//头像bitmap
-    TextView drawerInfoID;
-    TextView drawerInfoCoin;
-    Button drawerAboutBtn;
+    private TextView drawerInfoID;
+    private TextView drawerInfoCoin;
+    private Button drawerAboutBtn;
     private ImageButton avatarImageButton;
+    private TextView drawerNickName;
 
     //json形式的用户资料
     private DecodedLoginData decodedLoginData;
@@ -80,12 +81,26 @@ public class InnerActivity extends AppCompatActivity {
     }
     //初始化drawer（除了头像照片，但还是初始化了头像的其他内容）
     private void initDrawerExceptAvatarImage(){
+        drawerNickName = findViewById(R.id.drawer_nickname);
         avatarImageButton = findViewById(R.id.innerAvatarImageButton);
         drawerInfoID = findViewById(R.id.drawer_info_id);
         drawerInfoCoin = findViewById(R.id.drawer_info_coin);
         drawerAboutBtn = findViewById(R.id.about_page_btn);
-
-
+        drawerNickName.setText(decodedLoginData.getNickname());
+        avatarImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DetailedInfo.actStart(thisInnerActivity);
+            }
+        });
+        drawerInfoID.setText("ID："+decodedLoginData.getId());
+        drawerInfoCoin.setText("硬币数："+decodedLoginData.getCoinCount());
+        drawerAboutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AboutPage.actStart(thisInnerActivity,decodedLoginData);
+            }
+        });
     }
 
     //加载头像的图像（耗时任务，用了多线程和handler）
