@@ -8,68 +8,50 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
     <!--主界面，主内容区的布局代码要放在侧滑菜单布局的前面-->
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include layout="@layout/top_view_bar"
-            android:id="@+id/inner_top_view_bar_layout"
-            />
-        <FrameLayout
-            android:id="@+id/id_content"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </FrameLayout>
+        <include
+            android:elevation="20dp"
+            layout="@layout/top_view_bar"
+            android:id="@+id/inner_top_view_bar_layout"></include>
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            app:elevation="20sp"
-            app:itemTextColor="@color/black"
-            app:itemBackground="@android:color/darker_gray"
-            android:id="@+id/bottom_navigation_view"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:tabIndicatorHeight="0dp"
-            app:tabBackground="@android:color/transparent"
-            app:tabRippleColor="@android:color/holo_orange_light"
-            app:menu="@menu/menu_items"
-            />
-
-    </LinearLayout>
+            android:layout_height="50dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <!--侧滑界面,必须设置layout_gravity属性,表示侧滑方向-->
     <LinearLayout
         android:layout_gravity="start"
         android:id="@+id/ll"
-        android:background="@android:color/holo_orange_light"
+        android:background="@android:color/darker_gray"
         android:orientation="vertical"
         android:layout_width="300dp"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:elevation="20sp"
+
+        <View
+            android:background="@android:color/holo_green_dark"
+            android:elevation="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="20sp"
+            />
+        <TextView
+            android:background="@android:color/holo_green_dark"
+            android:elevation="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="20sp"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="25dp"
-                android:text="我的信息"
-                android:gravity="center"
-                android:layout_gravity="center"
-                tools:ignore="HardcodedText" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="20sp"
-                />
-        </LinearLayout>
+            android:textSize="25dp"
+            android:text="我的信息"
+            android:gravity="center"
+            android:layout_gravity="center"
+            tools:ignore="HardcodedText" />
+        <View
+            android:background="@android:color/holo_green_dark"
+            android:elevation="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="20sp"
+            />
+
 
         <View
             android:layout_width="wrap_content"
@@ -84,7 +66,7 @@
 
         <ImageButton
             android:id="@+id/innerAvatarImageButton"
-            android:elevation="20sp"
+            android:elevation="10sp"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
@@ -106,6 +88,20 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:text="硬币：获取中"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="40dp"/>
+        <TextView
+            android:elevation="20dp"
+            android:background="@android:color/holo_green_dark"
+            android:id="@+id/drawer_document_entrance_tv"
+            android:gravity="center"
+            android:clickable="true"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="我的收藏"
+            />
         <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -113,9 +109,12 @@
         android:orientation="vertical">
          </LinearLayout>
 
-        <Button
-            android:id="@+id/about_page_btn"
-            android:background="@android:color/transparent"
+
+        <TextView
+
+            android:elevation="20dp"
+            android:id="@+id/about_page_tv"
+            android:background="@android:color/holo_orange_light"
             android:textSize="25dp"
             android:layout_gravity="bottom"
             android:layout_width="match_parent"
@@ -123,8 +122,8 @@
             android:gravity="center"
             android:text="关于" />
         <View
-            android:layout_width="match_parent"
-            android:layout_height="50dp"/>
+            android:layout_width="0dp"
+            android:layout_height="70dp"/>
     </LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

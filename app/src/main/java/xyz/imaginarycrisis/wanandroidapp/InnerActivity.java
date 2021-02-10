@@ -38,9 +38,10 @@ public class InnerActivity extends AppCompatActivity {
     private Bitmap avatarMap;//头像bitmap
     private TextView drawerInfoID;
     private TextView drawerInfoCoin;
-    private Button drawerAboutBtn;
+    private TextView drawerAboutTv;
     private ImageButton avatarImageButton;
     private TextView drawerNickName;
+    private TextView drawerDocumentEntranceTv;
 
     //json形式的用户资料
     private DecodedLoginData decodedLoginData;
@@ -67,15 +68,15 @@ public class InnerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inner);
 
-        initUIViews();
+        initUIViews("首页");
         getAccountData();
         initDrawerExceptAvatarImage();
         fillAvatarImage();
     }
     //初始化UI界面
-    private void initUIViews(){
-        title = findViewById(R.id.inner_top_view_bar_layout).findViewById(R.id.top_view_bar_title);
-        title.setText("首页");
+    private void initUIViews(String title){
+        this.title = findViewById(R.id.inner_top_view_bar_layout).findViewById(R.id.top_view_bar_title);
+        this.title.setText(title);
         StatusBarUtils.setWindowStatusBarColor(this,R.color.orange_for_top_view_bar);
     }
     //隐式启动本活动方法
@@ -91,11 +92,18 @@ public class InnerActivity extends AppCompatActivity {
     }
     //初始化drawer（除了头像照片，但还是初始化了头像的其他内容）
     private void initDrawerExceptAvatarImage(){
+        drawerDocumentEntranceTv = findViewById(R.id.drawer_document_entrance_tv);
+        drawerDocumentEntranceTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DocumentActivity.actStart(thisInnerActivityContext);
+            }
+        });
         drawerNickName = findViewById(R.id.drawer_nickname);
         avatarImageButton = findViewById(R.id.innerAvatarImageButton);
         drawerInfoID = findViewById(R.id.drawer_info_id);
         drawerInfoCoin = findViewById(R.id.drawer_info_coin);
-        drawerAboutBtn = findViewById(R.id.about_page_btn);
+        drawerAboutTv = findViewById(R.id.about_page_tv);
         drawerNickName.setText(decodedLoginData.getNickname());
         avatarImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +113,7 @@ public class InnerActivity extends AppCompatActivity {
         });
         drawerInfoID.setText("ID："+decodedLoginData.getId());
         drawerInfoCoin.setText("硬币数："+decodedLoginData.getCoinCount());
-        drawerAboutBtn.setOnClickListener(new View.OnClickListener() {
+        drawerAboutTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AboutPage.actStart(thisInnerActivityContext,decodedLoginData);
