@@ -54,8 +54,11 @@ public class InnerActivity extends AppCompatActivity {
     //json
     private String data;
 
-    //为了方便，定义一个context指向这个活动所指向的对象
-    private final Context thisInnerActivity = InnerActivity.this;
+    //为了方便，定义一个context指向这个活动的context
+    private final Context thisInnerActivityContext = InnerActivity.this;
+
+    //UI对象声明
+    private TextView title;
 
     private PagerAdapter mPagerAdapter;
     //onCreate方法
@@ -64,9 +67,16 @@ public class InnerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inner);
 
+        initUIViews();
         getAccountData();
         initDrawerExceptAvatarImage();
         fillAvatarImage();
+    }
+    //初始化UI界面
+    private void initUIViews(){
+        title = findViewById(R.id.inner_top_view_bar_layout).findViewById(R.id.top_view_bar_title);
+        title.setText("首页");
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.orange_for_top_view_bar);
     }
     //隐式启动本活动方法
     public static void activityStart(String responseData, Context context){
@@ -90,7 +100,7 @@ public class InnerActivity extends AppCompatActivity {
         avatarImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DetailedInfo.actStart(thisInnerActivity);
+                DetailedInfo.actStart(thisInnerActivityContext);
             }
         });
         drawerInfoID.setText("ID："+decodedLoginData.getId());
@@ -98,7 +108,7 @@ public class InnerActivity extends AppCompatActivity {
         drawerAboutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AboutPage.actStart(thisInnerActivity,decodedLoginData);
+                AboutPage.actStart(thisInnerActivityContext,decodedLoginData);
             }
         });
     }

@@ -40,15 +40,16 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private TextView tvNoAccount;
     private Button loginButton;
-    private Context thisLoginActivity;
+    private Context thisLoginActivityContext;
     String responseData;
     private MHandler mHandler = new MHandler();
+    private LoginActivity thisLoginActivity = LoginActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        thisLoginActivity = this;
+        thisLoginActivityContext = this;
 
         initViews();
         setListeners();
@@ -60,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initViews(){
+        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
+        StatusBarUtils.setStatusBarLightMode(this);
         touristButton = findViewById(R.id.tourist_login_button);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
@@ -77,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 if(username.isEmpty()||password.isEmpty())
-                    Toast.makeText(thisLoginActivity,"用户名、密码不能为空", LENGTH_SHORT).show();
+                    Toast.makeText(thisLoginActivityContext,"用户名、密码不能为空", LENGTH_SHORT).show();
 
                 else {
                     HashMap<String,String> map = new HashMap<>();
@@ -94,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
-                RegisterActivity.activityStart(thisLoginActivity);
+                RegisterActivity.activityStart(thisLoginActivityContext);
             }
         };
         style.setSpan(clickableSpan, 5, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -106,7 +109,8 @@ public class LoginActivity extends AppCompatActivity {
         touristButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InnerActivity.activityStart("",thisLoginActivity);
+                InnerActivity.activityStart("",thisLoginActivityContext);
+                thisLoginActivity.finish();
             }
         });
     }
@@ -150,12 +154,12 @@ public class LoginActivity extends AppCompatActivity {
     private void continueLoginProcess(){
         boolean err = loginErr();
         if(err){
-            Toast.makeText(thisLoginActivity,"登陆失败！\n原因："+errMsg(),LENGTH_SHORT).show();
+            Toast.makeText(thisLoginActivityContext,"登陆失败！\n原因："+errMsg(),LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(thisLoginActivity,"恭喜您登陆成功！",LENGTH_SHORT).show();
-            InnerActivity.activityStart(responseData,thisLoginActivity);
-            this.finish();
+            Toast.makeText(thisLoginActivityContext,"恭喜您登陆成功！",LENGTH_SHORT).show();
+            InnerActivity.activityStart(responseData,thisLoginActivityContext);
+            thisLoginActivity.finish();
         }
     }
 

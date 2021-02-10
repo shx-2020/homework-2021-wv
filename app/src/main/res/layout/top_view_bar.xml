@@ -10,6 +10,7 @@
     >
 
     <Button
+        android:id="@+id/top_view_bar_back_button"
         android:layout_width="45dp"
         android:layout_height="43dp"
         android:background="@android:color/transparent"
@@ -21,15 +22,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/top_view_bar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="标题"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText,MissingConstraints" />
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:clickable="true"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刷新"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.955"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

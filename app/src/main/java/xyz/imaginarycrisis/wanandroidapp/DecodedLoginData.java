@@ -82,7 +82,7 @@ public class DecodedLoginData {
     public static DecodedLoginData spawnDecodedJsonData(String data){
         try{
             JSONObject jsonObject = new JSONObject(data);
-            if(jsonObject.getInt("errorCode")!=0){
+            if(jsonObject.getInt("errorCode")==0){
                 JSONObject tData = jsonObject.getJSONObject("data");
                 String tUsername = tData.getString("username");
                 String tNickname = tData.getString("nickname");

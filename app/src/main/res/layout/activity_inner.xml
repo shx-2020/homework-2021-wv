@@ -13,7 +13,9 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include layout="@layout/top_view_bar"/>
+        <include layout="@layout/top_view_bar"
+            android:id="@+id/inner_top_view_bar_layout"
+            />
         <FrameLayout
             android:id="@+id/id_content"
             android:layout_width="match_parent"
@@ -47,7 +49,6 @@
         android:layout_width="300dp"
         android:layout_height="match_parent">
         <LinearLayout
-            android:background="@android:color/holo_orange_dark"
             android:elevation="20sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,7 +58,6 @@
                 android:layout_height="20sp"
                 />
             <TextView
-                android:textColor="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="25dp"
