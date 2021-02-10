@@ -5,5 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity">
+    <include
+        layout="@layout/top_view_bar"
+        android:id="@+id/register_tvb_layout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
