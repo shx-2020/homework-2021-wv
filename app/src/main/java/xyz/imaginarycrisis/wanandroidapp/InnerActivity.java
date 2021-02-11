@@ -82,7 +82,7 @@ public class InnerActivity extends AppCompatActivity {
         titleTv = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_title);
         titleTv.setText(title);
         StatusBarUtils.setWindowStatusBarColor(this,R.color.orange_for_top_view_bar);
-        Button btnBack = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_back_button);
+        ImageButton btnBack = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_back_button);
         TextView tvRefresh = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_refresh);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,22 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item_index"
-        android:icon="@drawable/首页"
+        android:icon="@drawable/ic_outline_home_24"
         android:title="首页"
         />
     <item
+        android:icon="@drawable/ic_outline_outlined_flag_24"
         android:id="@+id/item_playground"
         android:title="广场"
         />
     <item
+        android:icon="@drawable/ic_baseline_settings_24"
         android:id="@+id/item_sys"
         android:title="体系"
         />
     <item
+        android:icon="@drawable/ic_baseline_navigation_24"
         android:id="@+id/item_navi"
         android:title="导航"
         />
     <item
+        android:icon="@drawable/ic_outline_article_24"
         android:id="@+id/item_articles"
         android:title="文章"
         />

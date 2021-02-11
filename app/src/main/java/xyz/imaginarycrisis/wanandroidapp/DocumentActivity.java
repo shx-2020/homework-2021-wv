@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ public class DocumentActivity extends AppCompatActivity {
         titleTv = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_title);
         titleTv.setText(title);
         StatusBarUtils.setWindowStatusBarColor(this,R.color.orange_for_top_view_bar);
-        Button btnBack = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_back_button);
+        ImageButton btnBack = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_back_button);
         TextView tvRefresh = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_refresh);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
