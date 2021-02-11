@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item_index"
+        android:icon="@drawable/首页"
         android:title="首页"
         />
     <item
