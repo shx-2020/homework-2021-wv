@@ -6,12 +6,101 @@
     android:layout_height="match_parent"
     tools:context=".DetailedInfo">
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
         <include
             android:id="@+id/detail_info_top_view_bar_layout"
             layout="@layout/top_view_bar"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/detail_id"
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.229" />
+
+            <TextView
+                android:id="@+id/detail_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.433" />
+
+            <TextView
+                android:id="@+id/detail_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.333" />
+
+            <TextView
+                android:id="@+id/detail_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.551" />
+
+            <TextView
+                android:id="@+id/detail_coin_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.676" />
+
+            <TextView
+                android:id="@+id/detail_admin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.761" />
+
+            <TextView
+                android:id="@+id/detail_public_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.852" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

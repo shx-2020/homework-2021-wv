@@ -30,6 +30,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -81,11 +82,30 @@ public class InnerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inner);
 
         initTopBarViews("玩Android",R.id.inner_top_view_bar_layout);
-        getAccountData();
+        getData();
         initDrawerExceptAvatarImage();
         fillAvatarImage();
         initVpAndBnv();
     }
+    public static void actStart(Context context,DecodedLoginData loginDataIn){
+        Intent intent = new Intent(context,InnerActivity.class);
+
+        HashMap<String, DecodedLoginData> map = new HashMap<String,DecodedLoginData>();
+        map.put("allData",loginDataIn);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("serializable",map);
+
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
+    private void getData(){
+        Bundle bundle = getIntent().getExtras();
+        HashMap<String,DecodedLoginData> map = (HashMap<String,DecodedLoginData>)bundle.getSerializable("serializable");
+        decodedLoginData = map.get("allData");
+    }
+
     //初始化UI界面
     private void initTopBarViews(String title, int tarLayoutId){
         Activity thisActivity = this;
@@ -114,17 +134,6 @@ public class InnerActivity extends AppCompatActivity {
             }
         });
     }
-    //隐式启动本活动方法
-    public static void activityStart(String responseData, Context context){
-        Intent intent = new Intent(context, InnerActivity.class);
-        intent.putExtra("data",responseData);
-        context.startActivity(intent);
-    }
-    //获得json以及解码的用户信息的方法
-    private void getAccountData(){
-        data = getIntent().getStringExtra("data");
-        decodedLoginData = DecodedLoginData.spawnDecodedJsonData(data);
-    }
     //初始化drawer（除了头像照片，但还是初始化了头像的其他内容）
     private void initDrawerExceptAvatarImage(){
         drawerDocumentEntranceTv = findViewById(R.id.drawer_document_entrance_tv);
@@ -143,7 +152,7 @@ public class InnerActivity extends AppCompatActivity {
         avatarImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DetailedInfo.actStart(thisInnerActivityContext);
+                DetailedInfo.actStart(thisInnerActivityContext,decodedLoginData);
             }
         });
         drawerInfoID.setText("ID："+decodedLoginData.getId());

@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
         touristButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InnerActivity.activityStart("",thisLoginActivityContext);
+                InnerActivity.actStart(thisLoginActivityContext,DecodedLoginData.spawnDecodedJsonData(responseData));
                 thisLoginActivity.finish();
             }
         });
@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else{
             Toast.makeText(thisLoginActivityContext,"恭喜您登陆成功！",LENGTH_SHORT).show();
-            InnerActivity.activityStart(responseData,thisLoginActivityContext);
+            InnerActivity.actStart(thisLoginActivityContext,DecodedLoginData.spawnDecodedJsonData(responseData));
             thisLoginActivity.finish();
         }
     }
