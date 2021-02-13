@@ -20,6 +20,7 @@
             layout="@layout/top_view_bar"
             android:id="@+id/inner_top_view_bar_layout"></include>
         <androidx.viewpager.widget.ViewPager
+            android:id="@+id/inner_main_viewpager"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
@@ -28,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             app:menu="@menu/menu_items"
+            android:id="@+id/bottom_navigation_view"
             />
     </LinearLayout>
     <!--侧滑界面,必须设置layout_gravity属性,表示侧滑方向-->

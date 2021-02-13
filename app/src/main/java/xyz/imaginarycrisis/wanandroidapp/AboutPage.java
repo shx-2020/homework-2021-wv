@@ -1,9 +1,11 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -61,8 +63,10 @@ public class AboutPage extends AppCompatActivity {
 
     public void initViews(){
         tvContent=findViewById(R.id.about_page_content);
-        tvContent.setText("应用名称：玩AndroidApp（imaginarycrisis.xyz版）\n版本：Beta 0.1\n不得用于非法用途或未经授权的商业用途。");
+        tvContent.setText("应用名称：玩AndroidApp（imaginarycrisis开发，基于玩Android的开发API）\n版本：Beta 0.1\n不得用于非法用途或未经授权的商业用途。");
         tvContent.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
     }
+
+
 
 }

@@ -8,8 +8,9 @@
 * - [x] 登陆页面
 * - [ ] 注册页面
 * - [ ] 进入后页面
-  * - [ ] 底部导航栏与viewpager
-    * - [ ] 翻页功能
+  * - [x] 底部导航栏与viewpager
+    * - [x] 翻页功能
+    * - [ ] viewpager翻页禁止（为tablayout让路）
     * - [ ] 首页
       * - [ ] Banner
       * - [ ] RecyclerView文章列表

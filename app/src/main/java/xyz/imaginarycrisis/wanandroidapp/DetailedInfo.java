@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 public class DetailedInfo extends AppCompatActivity {
     TextView tv;
     Context thisDetailedInfo = DetailedInfo.this;
+    DecodedLoginData loginData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,7 +2,9 @@ package xyz.imaginarycrisis.wanandroidapp;
 
 import org.json.JSONObject;
 
-public class DecodedLoginData {
+import java.io.Serializable;
+
+public class DecodedLoginData implements Serializable {
     private String username;
     private String nickname;
     private int id;

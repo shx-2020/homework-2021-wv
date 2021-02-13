@@ -1,18 +1,23 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +29,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -36,7 +43,7 @@ public class InnerActivity extends AppCompatActivity {
 
             avatarImageButton.setImageBitmap(avatarMap);//正式设置头像按钮的图像
         }
-    };//自定义Handler用于接收头像bitmap，前文（误）详见fillAvatarImage()方法
+    };//自定义Handler用于接收头像bitmap
     private Bitmap avatarMap;//头像bitmap
     private TextView drawerInfoID;
     private TextView drawerInfoCoin;
@@ -48,10 +55,14 @@ public class InnerActivity extends AppCompatActivity {
     //json形式的用户资料
     private DecodedLoginData decodedLoginData;
 
-    //主页面对象声明
-    private ViewPager viewPager;
-    private MenuItem menuItem;
-    private BottomNavigationView bottomNavigationView;
+    //ViewPager、BottomNavigationView相关
+    private ViewPager mainViewPager;
+    private BottomNavigationView bnv;
+    private IndexFragment indexFragment;
+    private PlaygroundFragment playgroundFragment;
+    private SystemFragment systemFragment;
+    private NaviFragment naviFragment;
+    private ArticleFragment articleFragment;
 
 
     //json
@@ -63,7 +74,6 @@ public class InnerActivity extends AppCompatActivity {
     //UI对象声明
     private TextView title;
 
-    private PagerAdapter mPagerAdapter;
     //onCreate方法
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +84,7 @@ public class InnerActivity extends AppCompatActivity {
         getAccountData();
         initDrawerExceptAvatarImage();
         fillAvatarImage();
+        initVpAndBnv();
     }
     //初始化UI界面
     private void initTopBarViews(String title, int tarLayoutId){
@@ -87,7 +98,7 @@ public class InnerActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                thisActivity.finish();
+                backBtnAct(thisInnerActivityContext);
             }
         });
         tvRefresh.setOnClickListener(new View.OnClickListener() {
@@ -172,4 +183,101 @@ public class InnerActivity extends AppCompatActivity {
         new Thread(networkGetAvatar).start();//开始调用这个runnable的线程
     }
 
+    private void backBtnAct(Context context){
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(context);
+        normalDialog.setIcon(R.drawable.ic_baseline_sick_24);
+        normalDialog.setTitle("提示").setMessage("您点击了返回按钮，你要……");
+        normalDialog.setPositiveButton("重新登录？",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        LoginActivity.activityStart(thisInnerActivityContext);
+                        finish();
+                    }
+                });
+        normalDialog.setNeutralButton("退出程序？",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishContext();
+                    }
+                });
+        normalDialog.setNegativeButton("取消？", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        normalDialog.show();
+    }
+
+    private void finishContext(){
+        this.finish();
+    }
+
+    private void initVpAndBnv(){
+        indexFragment = new IndexFragment();
+        playgroundFragment = new PlaygroundFragment();
+        systemFragment = new SystemFragment();
+        naviFragment = new NaviFragment();
+        articleFragment = new ArticleFragment();
+        //==========
+        mainViewPager = findViewById(R.id.inner_main_viewpager);
+        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                bnv.getMenu().getItem(position).setChecked(true);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+        bnv = findViewById(R.id.bottom_navigation_view);
+        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                mainViewPager.setCurrentItem(item.getOrder());
+                return true;
+            }
+        });
+
+
+        mainViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            @NonNull
+            @Override
+            public Fragment getItem(int position) {
+                switch (position){
+                    case 0:
+                        return indexFragment;
+                    case 1:
+                        return playgroundFragment;
+                    case 2:
+                        return systemFragment;
+                    case 3:
+                        return naviFragment;
+                    case 4:
+                        return articleFragment;
+
+                }
+                return null;
+            }
+
+            @Override
+            public int getCount() {
+                return 5;
+            }
+        });
+
+
+    }
 }
