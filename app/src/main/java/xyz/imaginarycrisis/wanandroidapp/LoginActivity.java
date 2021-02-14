@@ -61,8 +61,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initViews(){
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.white);
-        StatusBarUtils.setStatusBarLightMode(this);
+        Tools.setWindowStatusBarColor(this,R.color.white);
+        Tools.setStatusBarLightMode(this);
         touristButton = findViewById(R.id.tourist_login_button);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
@@ -136,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                         OutputStream outputStream = connection.getOutputStream();
                         outputStream.write(dataToWrite.substring(0,dataToWrite.length()-1).getBytes());
                         InputStream in = connection.getInputStream();
-                        String responseData = streamToString(in);
+                        String responseData = Tools.streamToString(in);
                         Message msg = new Message();
                         msg.obj = responseData;
                         mHandler.sendMessage(msg);
@@ -189,28 +189,7 @@ public class LoginActivity extends AppCompatActivity {
         else
             return true;
     }
-    String streamToString(InputStream in){
-        StringBuilder sb = new StringBuilder();
-        String oneLine;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        try {
-            while((oneLine = reader.readLine())!=null){
-                sb.append(oneLine).append('\n');
-            }
 
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        finally {
-            try{
-                in.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
-        return sb.toString();
-    }
 
 
     private class MHandler extends Handler{

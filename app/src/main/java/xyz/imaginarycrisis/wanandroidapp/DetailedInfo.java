@@ -1,13 +1,16 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +21,7 @@ public class DetailedInfo extends AppCompatActivity {
     TextView tv;
     Context thisDetailedInfo = DetailedInfo.this;
     DecodedLoginData loginData;
+    Button button_logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,7 @@ public class DetailedInfo extends AppCompatActivity {
         initTopBarViews("详细信息",R.id.detail_info_top_view_bar_layout);
         getData();
         initializeTextViews();
+        initButton();
     }
     //隐式调用该活动
     public static void actStart(Context context,DecodedLoginData loginDataIn){
@@ -53,7 +58,7 @@ public class DetailedInfo extends AppCompatActivity {
         TextView titleTv;
         titleTv = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_title);
         titleTv.setText(title);
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.orange_for_top_view_bar);
+        Tools.setWindowStatusBarColor(this,R.color.orange_for_top_view_bar);
         ImageButton btnBack = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_back_button);
         TextView tvRefresh = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_refresh);
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -97,5 +102,47 @@ public class DetailedInfo extends AppCompatActivity {
             isAdminToString = "否";
         tvAdmin.setText("是否为管理员："+isAdminToString);
         tvCoinCount.setText("硬币数："+loginData.getCoinCount());
+    }
+
+    private void initButton(){
+        button_logout=findViewById(R.id.detailed_pg_logout_btn);
+        button_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder normalDialog =
+                        new AlertDialog.Builder(thisDetailedInfo);
+                normalDialog.setIcon(R.drawable.ic_baseline_sick_24);
+                normalDialog.setTitle("提示").setMessage("您点击了登出按钮，确定登出？");
+                normalDialog.setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                logout();
+                            }
+                        });
+                normalDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //no action
+                    }
+                });
+                normalDialog.show();
+            }
+        });
+    }
+
+    private void logout(){
+        clearCookie();
+        exit();
+    }
+
+    private void clearCookie(){
+
+    }
+
+    private void exit(){
+        Intent intent = new Intent(DetailedInfo.this,LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
