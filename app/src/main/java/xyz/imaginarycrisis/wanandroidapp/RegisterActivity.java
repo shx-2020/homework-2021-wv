@@ -31,9 +31,9 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText et_password;
     private EditText et_repassword;
     private Button regButton;
-    private String regURL_string = "https://www.wanandroid.com/user/register";
+    private final String regURL_string = "https://www.wanandroid.com/user/register";
     private String responseData;
-    private Context thisContext = RegisterActivity.this;
+    private final Context thisContext = RegisterActivity.this;
 
     private MHandler mHandler = new MHandler();
     @Override
