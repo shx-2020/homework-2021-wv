@@ -123,7 +123,7 @@ public class InnerActivity extends AppCompatActivity {
         MyFragAdapter myFragAdapter = new MyFragAdapter(getSupportFragmentManager(),this,fragmentList);
         viewPager.setAdapter(myFragAdapter);
         viewPager.setSlidingEnable(false);
-
+        //使navigation按钮与viewpager绑定
         navigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getOrder()){
                 case 0:
