@@ -5,12 +5,20 @@ import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class Tools {
+public class
+
+Tools {
     public static void setWindowStatusBarColor(Activity activity, int colorResId) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -23,6 +31,7 @@ public class Tools {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static void setStatusBarLightMode(Activity activity) {
         try{if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             Window window = activity.getWindow();
@@ -57,6 +66,25 @@ public class Tools {
         }
         return sb.toString();
     }
-
+    public static void setupTopBarViews(Activity activity, String title, int tarLayoutId,
+                                        boolean defaultBackButton, @Nullable View.OnClickListener backListener,
+                                        boolean defaultRefreshMethod, @Nullable View.OnClickListener refreshListener){
+        TextView titleTv;
+        titleTv = activity.findViewById(tarLayoutId).findViewById(R.id.top_view_bar_title);
+        titleTv.setText(title);
+        Tools.setWindowStatusBarColor(activity,R.color.orange_for_top_view_bar);
+        ImageButton btnBack = activity.findViewById(tarLayoutId).findViewById(R.id.top_view_bar_back_button);
+        TextView tvRefresh = activity.findViewById(tarLayoutId).findViewById(R.id.top_view_bar_refresh);
+        if(defaultBackButton) {
+            backListener = v -> activity.finish();
+        }
+        btnBack.setOnClickListener(backListener);
+        if(defaultRefreshMethod) {
+            tvRefresh.setOnClickListener(v -> Toast.makeText(activity, "刷新按钮未定义", Toast.LENGTH_SHORT).show());
+        }
+        else{
+            tvRefresh.setOnClickListener(refreshListener);
+        }
+    }
 
 }

@@ -2,18 +2,13 @@ package xyz.imaginarycrisis.wanandroidapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -30,18 +25,19 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText et_username;
     private EditText et_password;
     private EditText et_repassword;
-    private Button regButton;
     private final String regURL_string = "https://www.wanandroid.com/user/register";
     private String responseData;
     private final Context thisContext = RegisterActivity.this;
 
-    private MHandler mHandler = new MHandler();
+    private final MHandler mHandler = new MHandler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        initTopBarViews("注册",R.id.register_tvb_layout);
+        Tools.setupTopBarViews(this,"注册",R.id.register_tvb_layout,
+                true,null,
+                true,null);
         initViews();
     }
 
@@ -51,28 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void initTopBarViews(String title, int tarLayoutId){
-        Activity thisActivity = this;
-        TextView titleTv;
-        titleTv = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_title);
-        titleTv.setText(title);
-        Tools.setWindowStatusBarColor(this,R.color.orange_for_top_view_bar);
-        ImageButton btnBack = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_back_button);
-        TextView tvRefresh = findViewById(tarLayoutId).findViewById(R.id.top_view_bar_refresh);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                thisActivity.finish();
-            }
-        });
-        tvRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //刷新方法...
-                Toast.makeText(thisActivity,"已刷新",Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+
     private void initViews(){
         initEditTexts();
         initRegButton();
@@ -85,20 +60,21 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initRegButton(){
-        regButton = findViewById(R.id.reg_button);
-        regButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(et_username.getText().toString().isEmpty()||et_password.getText().toString().isEmpty()
-                ||et_repassword.getText().toString().isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "不能留空", Toast.LENGTH_LONG).show();
-                } else {
-                    HashMap<String,String> map= new HashMap<>();
-                    map.put("username",et_username.getText().toString());
-                    map.put("password",et_password.getText().toString());
-                    map.put("repassword",et_password.getText().toString());
-                    reg(map);
-                }
+        Button regButton = findViewById(R.id.reg_button);
+        regButton.setOnClickListener(v -> {
+            if(et_username.getText().toString().isEmpty()||et_password.getText().toString().isEmpty()
+            ||et_repassword.getText().toString().isEmpty()) {
+                Toast.makeText(RegisterActivity.this, "不能留空", Toast.LENGTH_LONG).show();
+            }
+            else if(!et_repassword.getText().toString().equals(et_repassword.getText().toString())){
+                Toast.makeText(RegisterActivity.this,"密码与确认密码不一致",Toast.LENGTH_SHORT).show();
+            }
+            else {
+                HashMap<String,String> map= new HashMap<>();
+                map.put("username",et_username.getText().toString());
+                map.put("password",et_password.getText().toString());
+                map.put("repassword",et_password.getText().toString());
+                reg(map);
             }
         });
     }
@@ -125,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
                         String responseData = Tools.streamToString(in);
                         Message msgChild = new Message();
                         msgChild.obj = responseData;
-                        mHandler.handleMessage(msgChild);
+                        mHandler.sendMessage(msgChild);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

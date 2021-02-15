@@ -1,11 +1,13 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -60,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initViews(){
         Tools.setWindowStatusBarColor(this,R.color.white);
         Tools.setStatusBarLightMode(this);
@@ -72,25 +75,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setListeners(){
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+        loginButton.setOnClickListener(v -> {
+            String username = etUsername.getText().toString();
+            String password = etPassword.getText().toString();
 
 
-                if(username.isEmpty()||password.isEmpty())
-                    Toast.makeText(thisLoginActivityContext,"用户名、密码不能为空", LENGTH_SHORT).show();
+            if(username.isEmpty()||password.isEmpty())
+                Toast.makeText(thisLoginActivityContext,"用户名、密码不能为空", LENGTH_SHORT).show();
 
-                else {
-                    HashMap<String,String> map = new HashMap<>();
-                    map.put("username",username);
-                    map.put("password",password);
-                    requestLogin(map);
-                }
-
-
+            else {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("username",username);
+                map.put("password",password);
+                requestLogin(map);
             }
+
+
         });
         final SpannableStringBuilder style = new SpannableStringBuilder();
         style.append("没有账号？立刻注册！");
@@ -106,12 +106,9 @@ public class LoginActivity extends AppCompatActivity {
         style.setSpan(foregroundColorSpan, 5, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvNoAccount.setMovementMethod(LinkMovementMethod.getInstance());
 
-        touristButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InnerActivity.actStart(thisLoginActivityContext,DecodedLoginData.spawnDecodedJsonData(responseData));
-                thisLoginActivity.finish();
-            }
+        touristButton.setOnClickListener(v -> {
+            InnerActivity.actStart(thisLoginActivityContext,DecodedLoginData.spawnDecodedJsonData(responseData));
+            thisLoginActivity.finish();
         });
     }
 
@@ -184,10 +181,7 @@ public class LoginActivity extends AppCompatActivity {
             judgement = 99;
             e.printStackTrace();
         }
-        if(judgement==0)
-            return false;
-        else
-            return true;
+        return judgement != 0;
     }
 
 
@@ -196,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            responseData = (String)msg.obj;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               responseData = (String)msg.obj;
             continueLoginProcess();
         }
     }
