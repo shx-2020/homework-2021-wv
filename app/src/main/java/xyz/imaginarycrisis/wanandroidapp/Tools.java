@@ -66,6 +66,7 @@ Tools {
         }
         return sb.toString();
     }
+
     public static void setupTopBarViews(Activity activity, String title, int tarLayoutId,
                                         boolean defaultBackButton, @Nullable View.OnClickListener backListener,
                                         boolean defaultRefreshMethod, @Nullable View.OnClickListener refreshListener){

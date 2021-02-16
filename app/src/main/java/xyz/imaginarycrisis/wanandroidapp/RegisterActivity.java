@@ -2,6 +2,8 @@ package xyz.imaginarycrisis.wanandroidapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -145,6 +147,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(thisContext,"注册失败！\n错误："+errMsg,Toast.LENGTH_LONG).show();
         }
     }
+    @SuppressLint("HandlerLeak")
     private class MHandler extends Handler{
         @Override
         public void handleMessage(@NonNull Message msg) {

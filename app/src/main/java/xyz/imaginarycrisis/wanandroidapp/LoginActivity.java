@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,10 +25,7 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -44,9 +42,10 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Context thisLoginActivityContext;
     String responseData;
-    private MHandler mHandler = new MHandler();
-    private LoginActivity thisLoginActivity = LoginActivity.this;
+    private final MHandler mHandler = new MHandler();
+    private final LoginActivity thisLoginActivity = LoginActivity.this;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,6 +185,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+    @SuppressLint("HandlerLeak")
     private class MHandler extends Handler{
         @Override
         public void handleMessage(@NonNull Message msg) {

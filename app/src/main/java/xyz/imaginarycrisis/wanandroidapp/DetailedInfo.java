@@ -3,22 +3,18 @@ package xyz.imaginarycrisis.wanandroidapp;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.HashMap;
 
 public class DetailedInfo extends AppCompatActivity {
-    TextView tv;
     Context thisDetailedInfo = DetailedInfo.this;
     DecodedLoginData loginData;
     Button button_logout;
@@ -28,7 +24,7 @@ public class DetailedInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_info);
 
-        setupTopBarViews(this,"详细信息",R.id.detail_info_top_view_bar_layout,true,null,true,null);
+        Tools.setupTopBarViews(this,"详细信息",R.id.detail_info_top_view_bar_layout,true,null,true,null);
         getData();
         initializeTextViews();
         initButton();
@@ -37,7 +33,7 @@ public class DetailedInfo extends AppCompatActivity {
     public static void actStart(Context context,DecodedLoginData loginDataIn){
         Intent intent = new Intent(context,DetailedInfo.class);
 
-        HashMap<String, DecodedLoginData> map = new HashMap<String,DecodedLoginData>();
+        HashMap<String, DecodedLoginData> map = new HashMap<>();
         map.put("allData",loginDataIn);
 
         Bundle bundle = new Bundle();
@@ -49,10 +45,11 @@ public class DetailedInfo extends AppCompatActivity {
 
     private void getData(){
         Bundle bundle = getIntent().getExtras();
-        HashMap<String,DecodedLoginData> map = (HashMap<String,DecodedLoginData>)bundle.getSerializable("serializable");
+        HashMap<String,DecodedLoginData> map = (HashMap<String, DecodedLoginData>)bundle.getSerializable("serializable");
         loginData = map.get("allData");
     }
 
+    @SuppressLint("SetTextI18n")
     private void initializeTextViews(){
         TextView tvId,tvUsername,tvNickName,tvPublicName,tvEmail,tvCoinCount,tvAdmin;
         tvId = findViewById(R.id.detail_id);
@@ -79,28 +76,17 @@ public class DetailedInfo extends AppCompatActivity {
 
     private void initButton(){
         button_logout=findViewById(R.id.detailed_pg_logout_btn);
-        button_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder normalDialog =
-                        new AlertDialog.Builder(thisDetailedInfo);
-                normalDialog.setIcon(R.drawable.ic_baseline_sick_24);
-                normalDialog.setTitle("提示").setMessage("您点击了登出按钮，确定登出？");
-                normalDialog.setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                logout();
-                            }
-                        });
-                normalDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //no action
-                    }
-                });
-                normalDialog.show();
-            }
+        button_logout.setOnClickListener(v -> {
+            AlertDialog.Builder normalDialog =
+                    new AlertDialog.Builder(thisDetailedInfo);
+            normalDialog.setIcon(R.drawable.ic_baseline_sick_24);
+            normalDialog.setTitle("提示").setMessage("您点击了登出按钮，确定登出？");
+            normalDialog.setPositiveButton("确定",
+                    (dialog, which) -> logout());
+            normalDialog.setNegativeButton("取消", (dialog, which) -> {
+                //no action
+            });
+            normalDialog.show();
         });
     }
 

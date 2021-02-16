@@ -6,28 +6,35 @@
     tools:context=".IndexFragment">
 
     <LinearLayout
-        android:id="@+id/banner_block"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.viewpager.widget.ViewPager
-            android:layout_width="match_parent"
-            android:layout_height="200dp"/>
-        <View
-            android:background="@android:color/darker_gray"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"/>
-        <TextView
-            android:background="@android:color/darker_gray"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <View
-            android:background="@android:color/darker_gray"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/banner_block"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <xyz.imaginarycrisis.wanandroidapp.BannerViewPager
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+            <View
+                android:background="@android:color/darker_gray"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
+            <TextView
+                android:background="@android:color/darker_gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <View
+                android:background="@android:color/darker_gray"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
+
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </LinearLayout>
-
-
 
 </FrameLayout>

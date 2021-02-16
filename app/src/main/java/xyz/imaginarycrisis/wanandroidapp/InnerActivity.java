@@ -146,6 +146,7 @@ public class InnerActivity extends AppCompatActivity {
             }
             return false;
         });
+        //viewpager页面更改事件的监听
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
