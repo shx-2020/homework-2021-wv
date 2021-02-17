@@ -3,6 +3,7 @@ package xyz.imaginarycrisis.wanandroidapp;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ class IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ((CommonViewHolder)holder).authorOrShareUserTv.setText(dataList.get(position).getAuthorOrShareUser());
             ((CommonViewHolder)holder).tagTv.setText(dataList.get(position).getTag());
             ((CommonViewHolder)holder).timeTv.setText(dataList.get(position).getTime());
-            ((CommonViewHolder)holder).titleTv.setOnClickListener(v -> {
+            ((CommonViewHolder)holder).layout.setOnClickListener(v -> {
                 Uri uri = Uri.parse(dataList.get(position).getUrl());
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
@@ -94,6 +95,7 @@ class IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         TextView tagTv;
         TextView timeTv;
         ImageButton favBtn;
+        LinearLayout layout;
         public CommonViewHolder(View itemView) {
             super(itemView);
             titleTv = itemView.findViewById(R.id.rv_title);
@@ -101,6 +103,7 @@ class IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             tagTv = itemView.findViewById(R.id.rv_tags);
             timeTv = itemView.findViewById(R.id.rv_time);
             favBtn = itemView.findViewById(R.id.fav_btn);
+            layout = itemView.findViewById(R.id.pop_lay);
         }
     }
 

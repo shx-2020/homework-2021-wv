@@ -78,6 +78,7 @@
             android:text="昵称"/>
 
         <ImageButton
+            android:src="@drawable/person_image"
             android:id="@+id/innerAvatarImageButton"
             android:elevation="10sp"
             android:layout_width="100dp"
@@ -104,18 +105,18 @@
         <View
             android:layout_width="0dp"
             android:layout_height="40dp"/>
+
         <TextView
-            android:layout_gravity="center"
-            android:elevation="2dp"
-            android:background="@drawable/page_list_item"
             android:id="@+id/drawer_document_entrance_tv"
-            android:gravity="center"
-            android:clickable="true"
-            android:textSize="20sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="26dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ripple_pop"
+            android:clickable="true"
+            android:elevation="2dp"
+            android:gravity="center"
             android:text="   我的收藏   "
-            />
+            android:textSize="20sp" />
         <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -125,8 +126,7 @@
 
 
         <TextView
-
-            android:elevation="20dp"
+            android:background="@drawable/ripple_bg"
             android:id="@+id/about_page_tv"
             android:textSize="25dp"
             android:layout_gravity="bottom"

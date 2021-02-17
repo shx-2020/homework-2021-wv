@@ -32,5 +32,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.637" />
 
+    <ImageView
+        android:alpha="0.5"
+        android:layout_width="253dp"
+        android:layout_height="174dp"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="160dp"
+        android:src="@drawable/android_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
