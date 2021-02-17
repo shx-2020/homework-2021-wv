@@ -1,6 +1,8 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.view.Window;
@@ -86,6 +88,13 @@ Tools {
         else{
             tvRefresh.setOnClickListener(refreshListener);
         }
+    }
+
+    public static void  showCommonDialog(Context context) {
+        ProgressDialog mDefaultDialog = new ProgressDialog(context);
+        mDefaultDialog.setMessage("正在进行网络请求...");
+        mDefaultDialog.setCanceledOnTouchOutside(false);//默认true
+        mDefaultDialog.show();
     }
 
 }

@@ -12,7 +12,6 @@
     * - [x] 翻页功能
     * - [x] viewpager翻页禁止（为tablayout让路）
     * - [ ] 首页
-      * - [ ] Banner
       * - [ ] RecyclerView文章列表
     * - [ ] 广场
     * - [ ] 体系
