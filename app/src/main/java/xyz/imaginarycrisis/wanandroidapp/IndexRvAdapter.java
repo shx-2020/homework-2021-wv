@@ -51,6 +51,12 @@ class IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ((CommonViewHolder)holder).titleTv.setText(dataList.get(position).getTitle());
             ((CommonViewHolder)holder).authorOrShareUserTv.setText(dataList.get(position).getAuthorOrShareUser());
             ((CommonViewHolder)holder).infoTv.setText(dataList.get(position).getInfo());
+            ((CommonViewHolder)holder).titleTv.setOnClickListener(v -> {
+                Uri uri = Uri.parse(dataList.get(position).getUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            });
         }else {
         }
     }
