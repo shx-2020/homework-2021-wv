@@ -18,6 +18,8 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -63,8 +65,13 @@ public class LoginActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initViews(){
-        Tools.setWindowStatusBarColor(this,R.color.white);
-        Tools.setStatusBarLightMode(this);
+        Window window = thisLoginActivity.getWindow();
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        int option = window.getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+        window.getDecorView().setSystemUiVisibility(option);
+        window.setStatusBarColor(Color.TRANSPARENT);
         touristButton = findViewById(R.id.tourist_login_button);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);

@@ -4,19 +4,18 @@ package xyz.imaginarycrisis.wanandroidapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +37,24 @@ public class InnerActivity extends AppCompatActivity {
 
     List<Fragment> fragmentList;
 
+    View.OnClickListener backBtnListener = v->{
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(this);
+        normalDialog.setIcon(R.drawable.ic_baseline_sick_24);
+        normalDialog.setTitle("提示").setMessage("您点击了返回按钮，你要？");
+        normalDialog.setPositiveButton("退出", (dialog, which) -> finish());
+        normalDialog.setNegativeButton("取消", (dialog, which) -> {
+            //no action
+        });
+        normalDialog.setNeutralButton("登出", (dialog, which) -> {
+            LoginActivity.activityStart(InnerActivity.this);
+            finish();
+        });
+        normalDialog.show();
+    };
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,11 +90,13 @@ public class InnerActivity extends AppCompatActivity {
 
     //===初始化控件===
     //入口：
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initViews(){
 
         //---顶部导航---
         Tools.setupTopBarViews(this,"玩Android",R.id.inner_top_view_bar_layout,
-                true,null,true,null);
+                false,backBtnListener,true,null,
+                R.color.sea_green,false);
         //------
         initTextViews();
         initImageButton();

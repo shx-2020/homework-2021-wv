@@ -1,11 +1,13 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -13,11 +15,14 @@ import android.widget.TextView;
 public class AboutPage extends AppCompatActivity {
     TextView tvContent;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_page);
-        Tools.setupTopBarViews(this,"关于",R.id.about_page_top_view_bar_layout,true,null,true,null);
+        Tools.setupTopBarViews(this,"关于",R.id.about_page_top_view_bar_layout,
+                false,null,true,
+                null, R.color.sea_green,false);
         initViews();
 
     }

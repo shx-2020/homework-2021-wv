@@ -1,11 +1,13 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     private final Context thisContext = RegisterActivity.this;
 
     private final MHandler mHandler = new MHandler();
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         Tools.setupTopBarViews(this,"注册",R.id.register_tvb_layout,
                 true,null,
-                true,null);
+                true,null,
+                R.color.sea_green,false);
         initViews();
     }
 

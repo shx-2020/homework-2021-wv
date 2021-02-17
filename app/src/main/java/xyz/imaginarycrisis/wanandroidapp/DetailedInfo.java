@@ -1,5 +1,6 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,12 +21,15 @@ public class DetailedInfo extends AppCompatActivity {
     DecodedLoginData loginData;
     Button button_logout;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_info);
 
-        Tools.setupTopBarViews(this,"详细信息",R.id.detail_info_top_view_bar_layout,true,null,true,null);
+        Tools.setupTopBarViews(this,"详细信息",R.id.detail_info_top_view_bar_layout,
+                true,null,true,
+                null,R.color.teal_700,false);
         getData();
         initializeTextViews();
         initButton();

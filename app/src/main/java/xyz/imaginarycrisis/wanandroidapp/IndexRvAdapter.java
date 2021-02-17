@@ -6,8 +6,10 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,17 +47,28 @@ class IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return holder;
     }
 
+    private void addFav(){
+        Toast.makeText(context,"你点击了收藏按钮",Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof CommonViewHolder){
             ((CommonViewHolder)holder).titleTv.setText(dataList.get(position).getTitle());
             ((CommonViewHolder)holder).authorOrShareUserTv.setText(dataList.get(position).getAuthorOrShareUser());
-            ((CommonViewHolder)holder).infoTv.setText(dataList.get(position).getInfo());
+            ((CommonViewHolder)holder).tagTv.setText(dataList.get(position).getTag());
+            ((CommonViewHolder)holder).timeTv.setText(dataList.get(position).getTime());
             ((CommonViewHolder)holder).titleTv.setOnClickListener(v -> {
                 Uri uri = Uri.parse(dataList.get(position).getUrl());
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
+            });
+            ((CommonViewHolder)holder).favBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addFav();
+                }
             });
         }else {
         }
@@ -78,12 +91,16 @@ class IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     class CommonViewHolder extends RecyclerView.ViewHolder{
         TextView titleTv;
         TextView authorOrShareUserTv;
-        TextView infoTv;
+        TextView tagTv;
+        TextView timeTv;
+        ImageButton favBtn;
         public CommonViewHolder(View itemView) {
             super(itemView);
             titleTv = itemView.findViewById(R.id.rv_title);
             authorOrShareUserTv = itemView.findViewById(R.id.rv_author);
-            infoTv = itemView.findViewById(R.id.rv_info);
+            tagTv = itemView.findViewById(R.id.rv_tags);
+            timeTv = itemView.findViewById(R.id.rv_time);
+            favBtn = itemView.findViewById(R.id.fav_btn);
         }
     }
 

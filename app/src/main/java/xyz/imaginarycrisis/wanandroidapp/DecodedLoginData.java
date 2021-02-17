@@ -61,9 +61,6 @@ public class DecodedLoginData implements Serializable {
         return email;
     }
 
-    public String getIcon() {
-        return icon;
-    }
 
     public String getPublicName() {
         return publicName;

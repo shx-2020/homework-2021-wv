@@ -1,5 +1,6 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ public class IndexFragment extends Fragment {
     private List<IndexArticleData> dataList;
     private String responseData;
     private Handler mHandler = new Handler(){
+        @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);

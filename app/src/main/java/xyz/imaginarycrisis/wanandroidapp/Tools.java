@@ -1,18 +1,24 @@
 package xyz.imaginarycrisis.wanandroidapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.Layout;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -68,14 +74,28 @@ Tools {
         }
         return sb.toString();
     }
-
+/*
+    public static void  showCommonDialog(Context context) {
+        ProgressDialog mDefaultDialog = new ProgressDialog(context);
+        mDefaultDialog.setMessage("正在进行网络请求...");
+        mDefaultDialog.setCanceledOnTouchOutside(false);//默认true
+        mDefaultDialog.show();
+    }*/
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @SuppressLint("ResourceAsColor")
     public static void setupTopBarViews(Activity activity, String title, int tarLayoutId,
-                                        boolean defaultBackButton, @Nullable View.OnClickListener backListener,
-                                        boolean defaultRefreshMethod, @Nullable View.OnClickListener refreshListener){
+                                                 boolean defaultBackButton, @Nullable View.OnClickListener backListener,
+                                                 boolean defaultRefreshMethod, @Nullable View.OnClickListener refreshListener,
+                                                 int bgColorId, boolean darkText){
         TextView titleTv;
         titleTv = activity.findViewById(tarLayoutId).findViewById(R.id.top_view_bar_title);
         titleTv.setText(title);
-        Tools.setWindowStatusBarColor(activity,R.color.orange_for_top_view_bar);
+        Window window = activity.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        int option = window.getDecorView().getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+        window.getDecorView().setSystemUiVisibility(option);
+        window.setStatusBarColor(Color.TRANSPARENT);
         ImageButton btnBack = activity.findViewById(tarLayoutId).findViewById(R.id.top_view_bar_back_button);
         TextView tvRefresh = activity.findViewById(tarLayoutId).findViewById(R.id.top_view_bar_refresh);
         if(defaultBackButton) {
@@ -88,13 +108,12 @@ Tools {
         else{
             tvRefresh.setOnClickListener(refreshListener);
         }
-    }
-
-    public static void  showCommonDialog(Context context) {
-        ProgressDialog mDefaultDialog = new ProgressDialog(context);
-        mDefaultDialog.setMessage("正在进行网络请求...");
-        mDefaultDialog.setCanceledOnTouchOutside(false);//默认true
-        mDefaultDialog.show();
+        if(darkText){
+            titleTv.setTextColor(R.color.black);
+            setStatusBarLightMode(activity);
+        }
+        LinearLayout layout = activity.findViewById(tarLayoutId).findViewById(R.id.tvb_lay);
+        layout.setBackgroundColor(activity.getResources().getColor(bgColorId));
     }
 
 }

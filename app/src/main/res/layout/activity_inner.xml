@@ -42,13 +42,14 @@
         android:layout_height="match_parent">
 
         <View
-            android:background="@android:color/holo_green_dark"
+            android:background="@color/teal_700"
             android:elevation="40dp"
             android:layout_width="match_parent"
-            android:layout_height="20sp"
+            android:layout_height="30sp"
             />
         <TextView
-            android:background="@android:color/holo_green_dark"
+            android:background="@color/teal_700"
+            android:textColor="@color/white"
             android:elevation="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,10 +59,10 @@
             android:layout_gravity="center"
             tools:ignore="HardcodedText" />
         <View
-            android:background="@android:color/holo_green_dark"
+            android:background="@color/teal_700"
             android:elevation="40dp"
             android:layout_width="match_parent"
-            android:layout_height="20sp"
+            android:layout_height="32dp"
             />
 
 
@@ -104,15 +105,16 @@
             android:layout_width="0dp"
             android:layout_height="40dp"/>
         <TextView
-            android:elevation="20dp"
-            android:background="@android:color/holo_green_dark"
+            android:layout_gravity="center"
+            android:elevation="2dp"
+            android:background="@drawable/page_list_item"
             android:id="@+id/drawer_document_entrance_tv"
             android:gravity="center"
             android:clickable="true"
             android:textSize="20sp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="我的收藏"
+            android:text="   我的收藏   "
             />
         <LinearLayout
         android:layout_width="fill_parent"
@@ -126,7 +128,6 @@
 
             android:elevation="20dp"
             android:id="@+id/about_page_tv"
-            android:background="@android:color/holo_orange_light"
             android:textSize="25dp"
             android:layout_gravity="bottom"
             android:layout_width="match_parent"
