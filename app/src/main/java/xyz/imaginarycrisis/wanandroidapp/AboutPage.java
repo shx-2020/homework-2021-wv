@@ -21,7 +21,7 @@ public class AboutPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_page);
         Tools.setupTopBarViews(this,"关于",R.id.about_page_top_view_bar_layout,
-                false,null,true,
+                true,null,true,
                 null, R.color.sea_green,false);
         initViews();
 

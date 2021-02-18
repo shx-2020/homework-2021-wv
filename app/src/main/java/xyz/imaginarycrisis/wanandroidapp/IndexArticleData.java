@@ -3,6 +3,7 @@ package xyz.imaginarycrisis.wanandroidapp;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -80,6 +81,8 @@ public class IndexArticleData {
         try {
             JSONObject jsonObject = new JSONObject(json);
             JSONObject data = jsonObject.getJSONObject("data");
+            if(data.isNull("datas"))
+                return new ArrayList<>();
             JSONArray datas = data.getJSONArray("datas");
             for(int i=0;i<datas.length();i++){
                 String author = datas.getJSONObject(i).getString("author");
@@ -97,5 +100,27 @@ public class IndexArticleData {
             Log.e("system","json decoding error");
         }
         return dataList;
+    }
+
+    public static int getErrorCode(String json){
+        int i = -9999;
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            i=jsonObject.getInt("errorCode");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return i;
+    }
+
+    public static String getErrorMsg(String json){
+        String msg = "未知";
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            msg = jsonObject.getString("errorMsg");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return msg;
     }
 }

@@ -60,10 +60,7 @@ class IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ((CommonViewHolder)holder).tagTv.setText(dataList.get(position).getTag());
             ((CommonViewHolder)holder).timeTv.setText(dataList.get(position).getTime());
             ((CommonViewHolder)holder).layout.setOnClickListener(v -> {
-                Uri uri = Uri.parse(dataList.get(position).getUrl());
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                WebViewActivity.actStart(context,dataList.get(position).getUrl(),dataList.get(position).getTitle());
             });
             ((CommonViewHolder)holder).favBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
