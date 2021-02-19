@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Layout;
+import android.text.method.ScrollingMovementMethod;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -87,7 +90,7 @@ Tools {
                                                  boolean defaultBackButton, @Nullable View.OnClickListener backListener,
                                                  boolean defaultRefreshMethod, @Nullable View.OnClickListener refreshListener,
                                                  int bgColorId, boolean darkText){
-        TextView titleTv;
+        AlwaysMarqueeTextView titleTv;
         titleTv = activity.findViewById(tarLayoutId).findViewById(R.id.top_view_bar_title);
         titleTv.setText(title);
         Window window = activity.getWindow();
@@ -114,6 +117,9 @@ Tools {
         }
         LinearLayout layout = activity.findViewById(tarLayoutId).findViewById(R.id.tvb_lay);
         layout.setBackgroundColor(activity.getResources().getColor(bgColorId));
+        titleTv.setFocusable(true);
     }
+
+
 
 }

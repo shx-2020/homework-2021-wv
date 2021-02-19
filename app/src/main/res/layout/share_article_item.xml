@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:background="#F5F5F5"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="10dp"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_width="10dp"
+                android:layout_height="0dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:text="近期文章"/>
+            <View
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
+            <TextView
+                android:id="@+id/article_push_tv"
+                android:gravity="center"
+                android:background="@drawable/ripple_pop"
+                android:textSize="20dp"
+                android:text="   我要分享文章   "
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                />
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp"/>
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="10dp"/>
+    </LinearLayout>
+</LinearLayout>

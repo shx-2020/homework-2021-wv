@@ -3,16 +3,15 @@ package xyz.imaginarycrisis.wanandroidapp;
 import android.util.Log;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexArticleData {
-    public IndexArticleData(){return;}
+public class ArticleData {
+    public ArticleData(){return;}
 
-    public IndexArticleData(String author,String shareUser,String title,String url,String niceShareDate,String niceDate,String chapterName,String superChapterName){
+    public ArticleData(String author, String shareUser, String title, String url, String niceShareDate, String niceDate, String chapterName, String superChapterName){
         this.author = author;this.shareUser = shareUser;this.title = title;
         this.url = url; this.niceShareDate = niceShareDate;this.niceDate = niceDate;
         this.chapterName = chapterName;this.superChapterName = superChapterName;
@@ -76,8 +75,8 @@ public class IndexArticleData {
         return "分类："+superChapterName+"/"+chapterName;
     }
 
-    public static List<IndexArticleData> getIndexArticlesDataFromJson(String json){
-        List<IndexArticleData> dataList = new ArrayList<>();
+    public static List<ArticleData> getIndexArticlesDataFromJson(String json){
+        List<ArticleData> dataList = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(json);
             JSONObject data = jsonObject.getJSONObject("data");
@@ -93,7 +92,7 @@ public class IndexArticleData {
                 String url = datas.getJSONObject(i).getString("link");
                 String chapterName = datas.getJSONObject(i).getString("chapterName");
                 String superChapterName = datas.getJSONObject(i).getString("superChapterName");
-                dataList.add(new IndexArticleData(author,shareUser,title,url,niceShareDate,niceDate,chapterName,superChapterName));
+                dataList.add(new ArticleData(author,shareUser,title,url,niceShareDate,niceDate,chapterName,superChapterName));
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -6,9 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -16,11 +22,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class InnerActivity extends AppCompatActivity {
+import javax.net.ssl.HttpsURLConnection;
+
+import static android.widget.Toast.LENGTH_SHORT;
+
+public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdapter.MyOnClickListener{
 
     //===对象声明===
     //数据对象：
@@ -36,6 +52,16 @@ public class InnerActivity extends AppCompatActivity {
     //（至于为什么，还要为fragment里面的tabLayout让路，不然会发生滑动手势的冲突）
 
     List<Fragment> fragmentList;
+
+    @SuppressLint("HandlerLeak")
+    private final Handler pushHandler = new Handler(){
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            String ArticlePushResponseData = (String)msg.obj;
+            doAfterArticlePushRequestDone(ArticlePushResponseData);
+
+        }
+    };
 
     View.OnClickListener backBtnListener = v->{
         AlertDialog.Builder normalDialog =
@@ -184,5 +210,55 @@ public class InnerActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void requestArticlePush(String title, String link) {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("title",title);
+        params.put("link",link);
+        new Thread(
+                ()->{
+                    try {
+                        URL url = new URL("https://www.wanandroid.com/lg/user_article/add/json");
+                        HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+                        connection.setRequestMethod("POST");
+                        connection.setConnectTimeout(8000);
+                        connection.setReadTimeout(8000);
+                        connection.setDoOutput(true);
+                        connection.setDoInput(true);
+                        StringBuilder dataToWrite = new StringBuilder();
+                        for(String key:params.keySet()){
+                            dataToWrite.append(key).append("=").append(params.get(key)).append("&");
+                        }
+                        connection.connect();
+                        OutputStream outputStream = connection.getOutputStream();
+                        outputStream.write(dataToWrite.substring(0,dataToWrite.length()-1).getBytes());
+                        InputStream in = connection.getInputStream();
+                        String responseData = Tools.streamToString(in);
+                        Message msg = new Message();
+                        msg.obj = responseData;
+                        pushHandler.sendMessage(msg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("sys","connection error");
+                    }
+                }
+        ).run();
+    }
+    private void doAfterArticlePushRequestDone(String jsonData){
+        int errorCode = -99;
+        String errorMsg = "默认消息";
+        try{
+            JSONObject jsonObject = new JSONObject(jsonData);
+            errorCode = jsonObject.getInt("errorCode");
+            errorMsg = jsonObject.getString("errorMsg");
+        }catch (Exception e){e.printStackTrace();}
+        if(errorCode == 0){
+            Toast.makeText(InnerActivity.this,"提交成功", LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(InnerActivity.this,"提交失败！\n错误"+errorCode+"（"+errorMsg+"）",LENGTH_SHORT).show();
+        }
+    }
 
 }

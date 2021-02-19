@@ -19,8 +19,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,11 +31,10 @@ public class IndexFragment extends Fragment {
     private int currentPage = 1,currentPageCache = 1;
     private RecyclerView rv;
     private IndexRvAdapter adapter;
-    private List<IndexArticleData> dataList;
+    private List<ArticleData> dataList;
     private String responseData;
-    private Handler mHandler = new Handler(){
-        @SuppressLint("HandlerLeak")
-        @Override
+    @SuppressLint("HandlerLeak")
+    private final Handler mHandler = new Handler(){
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             responseData = (String)msg.obj;
@@ -129,20 +126,20 @@ public class IndexFragment extends Fragment {
     }
 
     private void doAfterRequestDone(){
-        if(IndexArticleData.getErrorCode(responseData)==0) {
-            if(IndexArticleData.getIndexArticlesDataFromJson(responseData).isEmpty()){
+        if(ArticleData.getErrorCode(responseData)==0) {
+            if(ArticleData.getIndexArticlesDataFromJson(responseData).isEmpty()){
                 Toast.makeText(getContext(),"错误！\n该页无法找到任何文章",Toast.LENGTH_SHORT).show();
                 currentPage = currentPageCache;
                 return;
             }
             dataList.clear();
-            dataList.addAll(IndexArticleData.getIndexArticlesDataFromJson(responseData));
+            dataList.addAll(ArticleData.getIndexArticlesDataFromJson(responseData));
             adapter.notifyDataSetChanged();
             Toast.makeText(getContext(), "跳转完成\n第" + currentPage + "页", Toast.LENGTH_LONG).show();
         }
         else{
-            Toast.makeText(getContext(),"错误！\n错误代码："+IndexArticleData.getErrorCode(responseData)+
-                    "\n错误信息："+IndexArticleData.getErrorMsg(responseData),Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"错误！\n错误代码："+ ArticleData.getErrorCode(responseData)+
+                    "\n错误信息："+ ArticleData.getErrorMsg(responseData),Toast.LENGTH_LONG).show();
         }
     }
 
