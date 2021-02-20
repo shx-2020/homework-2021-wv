@@ -45,7 +45,7 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:ellipsize="marquee"
                 android:scrollbars="vertical"
-                android:id="@+id/top_view_bar_title"
+                android:id="@+id/tvb_title"
                 android:layout_width="260dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"

@@ -91,7 +91,7 @@ Tools {
                                                  boolean defaultRefreshMethod, @Nullable View.OnClickListener refreshListener,
                                                  int bgColorId, boolean darkText){
         AlwaysMarqueeTextView titleTv;
-        titleTv = activity.findViewById(tarLayoutId).findViewById(R.id.top_view_bar_title);
+        titleTv = activity.findViewById(tarLayoutId).findViewById(R.id.tvb_title);
         titleTv.setText(title);
         Window window = activity.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

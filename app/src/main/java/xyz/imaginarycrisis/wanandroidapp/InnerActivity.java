@@ -146,7 +146,7 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
         tvDrawerId.setText("ID："+loginData.getId());
         tvDrawerCoinCount.setText("硬币数："+loginData.getCoinCount());
 
-        tvDocumentEntrance.setOnClickListener(v -> DocumentActivity.actStart(InnerActivity.this));
+        tvDocumentEntrance.setOnClickListener(v -> DocumentActivity.actStart(InnerActivity.this,cookieList));
         tvAboutEntrance.setOnClickListener(v-> AboutPage.actStart(InnerActivity.this));
     }
     //初始化ImageButton：
@@ -221,19 +221,15 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
         HashMap<String,String> params = new HashMap<>();
         params.put("title",title);
         params.put("link",link);
-        String oneLineCookie = "";
-        for(int i=0;i<cookieList.size();i++){
-            oneLineCookie+=cookieList.get(i);
-        }
-
-        String finalOneLineCookie = oneLineCookie;
         new Thread(
                 ()->{
                     try {
                         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
                         URL url = new URL("https://www.wanandroid.com/lg/user_article/add/json");
                         HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
-                        connection.setRequestProperty("Cookie", finalOneLineCookie);
+                        for(int i=0;i<cookieList.size();i++) {
+                            connection.addRequestProperty("Cookie", cookieList.get(i));
+                        }
                         connection.setRequestMethod("POST");
                         connection.setConnectTimeout(8000);
                         connection.setReadTimeout(8000);
