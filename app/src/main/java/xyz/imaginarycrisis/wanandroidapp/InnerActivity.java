@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -53,6 +54,8 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
 
     List<Fragment> fragmentList;
 
+    private List<String>cookieList = new ArrayList<>();
+
     @SuppressLint("HandlerLeak")
     private final Handler pushHandler = new Handler(){
         public void handleMessage(@NonNull Message msg) {
@@ -93,13 +96,14 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
 
 
     //方法：开始活动
-    public static void actStart(Context context, DecodedLoginData loginData){
+    public static void actStart(Context context, DecodedLoginData loginData,List<String> cookieList){
         Intent intent = new Intent(context,InnerActivity.class);
 
         //将数据存入map，因为hash map是序列化的数据，可以存入bundle，再将bundle传入活动
-        HashMap<String,DecodedLoginData> map = new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
         Bundle bundle = new Bundle();
         map.put("data",loginData);
+        map.put("cookieList",cookieList);
         bundle.putSerializable("dataInMap",map);
         intent.putExtras(bundle);
         context.startActivity(intent);
@@ -112,6 +116,7 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
         Bundle bundle = (Bundle)intent.getExtras();
         HashMap<String,DecodedLoginData> hashMap = (HashMap<String, DecodedLoginData>) bundle.get("dataInMap");
         loginData = (DecodedLoginData) hashMap.get("data");
+        cookieList = (List<String>)hashMap.get("cookieList");
     }
 
     //===初始化控件===
@@ -216,11 +221,19 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
         HashMap<String,String> params = new HashMap<>();
         params.put("title",title);
         params.put("link",link);
+        String oneLineCookie = "";
+        for(int i=0;i<cookieList.size();i++){
+            oneLineCookie+=cookieList.get(i);
+        }
+
+        String finalOneLineCookie = oneLineCookie;
         new Thread(
                 ()->{
                     try {
+                        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
                         URL url = new URL("https://www.wanandroid.com/lg/user_article/add/json");
                         HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
+                        connection.setRequestProperty("Cookie", finalOneLineCookie);
                         connection.setRequestMethod("POST");
                         connection.setConnectTimeout(8000);
                         connection.setReadTimeout(8000);

@@ -30,7 +30,10 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -46,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     String responseData;
     private final MHandler mHandler = new MHandler();
     private final LoginActivity thisLoginActivity = LoginActivity.this;
+    private List<String> setCookies = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -60,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
 
     static void activityStart(Context context){
         context.startActivity(new Intent(context,LoginActivity.class));
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -113,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         tvNoAccount.setMovementMethod(LinkMovementMethod.getInstance());
 
         touristButton.setOnClickListener(v -> {
-            InnerActivity.actStart(thisLoginActivityContext,DecodedLoginData.spawnDecodedJsonData(responseData));
+            InnerActivity.actStart(thisLoginActivityContext,DecodedLoginData.spawnDecodedJsonData(responseData),setCookies);
             thisLoginActivity.finish();
         });
     }
@@ -138,12 +141,16 @@ public class LoginActivity extends AppCompatActivity {
                         connection.connect();
                         OutputStream outputStream = connection.getOutputStream();
                         outputStream.write(dataToWrite.substring(0,dataToWrite.length()-1).getBytes());
+                        Map<String, List<String>> cookies = connection.getHeaderFields();
+                        List<String> setCookies = cookies.get("Set-Cookie");
                         InputStream in = connection.getInputStream();
                         String responseData = Tools.streamToString(in);
+                        HashMap<String,Object> map = new HashMap<>();
+                        map.put("responseData",responseData);
+                        map.put("setCookies",setCookies);
                         Message msg = new Message();
-                        msg.obj = responseData;
+                        msg.obj = map;
                         mHandler.sendMessage(msg);
-
                     }catch(Exception e){
                         e.printStackTrace();
                     }
@@ -161,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else{
             Toast.makeText(thisLoginActivityContext,"恭喜您登陆成功！",LENGTH_SHORT).show();
-            InnerActivity.actStart(thisLoginActivityContext,DecodedLoginData.spawnDecodedJsonData(responseData));
+            InnerActivity.actStart(thisLoginActivityContext,DecodedLoginData.spawnDecodedJsonData(responseData),setCookies);
             thisLoginActivity.finish();
         }
     }
@@ -197,7 +204,9 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               responseData = (String)msg.obj;
+            HashMap<String,Object> map = (HashMap<String, Object>) msg.obj;
+            responseData = (String) map.get("responseData");
+            setCookies = (List<String>)map.get("setCookies");
             continueLoginProcess();
         }
     }
