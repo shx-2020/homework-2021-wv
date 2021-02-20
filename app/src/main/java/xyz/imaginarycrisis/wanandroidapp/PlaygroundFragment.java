@@ -48,6 +48,7 @@ public class PlaygroundFragment extends Fragment{
         }
     };
     private EditText page_et;
+    private boolean firstLoading = true;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -119,7 +120,7 @@ public class PlaygroundFragment extends Fragment{
                 ()->
                 {
                     try {
-                        URL url = new URL("https://www.wanandroid.com/user_article/list/"+(currentPage-1)+"/json");
+                        URL url = new URL("https://www.wanandroid.com/user_article/list/" + (currentPage - 1) + "/json");
                         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                         connection.setDoInput(true);
                         connection.setReadTimeout(8000);
@@ -130,29 +131,31 @@ public class PlaygroundFragment extends Fragment{
                         Message msg = new Message();
                         msg.obj = responseData;
                         mHandler.sendMessage(msg);
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
         ).start();
     }
 
     private void doAfterRequestDone(){
-        if(ArticleData.getErrorCode(responseData)==0) {
-            if(ArticleData.getIndexArticlesDataFromJson(responseData).isEmpty()){
-                Toast.makeText(getContext(),"错误！\n该页无法找到任何文章", LENGTH_SHORT).show();
+        if (ArticleData.getErrorCode(responseData) == 0) {
+            if (ArticleData.getIndexArticlesDataFromJson(responseData).isEmpty()) {
+                Toast.makeText(getContext(), "广场\n错误！\n该页无法找到任何文章", LENGTH_SHORT).show();
                 currentPage = currentPageCache;
                 return;
             }
             dataList.clear();
             dataList.addAll(ArticleData.getIndexArticlesDataFromJson(responseData));
             adapter.notifyDataSetChanged();
-            Toast.makeText(getContext(), "跳转完成\n第" + currentPage + "页", Toast.LENGTH_LONG).show();
-        }
-        else{
-            Toast.makeText(getContext(),"错误！\n错误代码："+ ArticleData.getErrorCode(responseData)+
-                    "\n错误信息："+ ArticleData.getErrorMsg(responseData),Toast.LENGTH_LONG).show();
+            if(!firstLoading)
+                Toast.makeText(getContext(), "广场\n跳转完成\n第" + currentPage + "页", LENGTH_SHORT).show();
+            else
+                firstLoading=false;
+        } else {
+            Toast.makeText(getContext(), "广场\n错误！\n错误代码：" + ArticleData.getErrorCode(responseData) +
+                    "\n错误信息：" + ArticleData.getErrorMsg(responseData), LENGTH_SHORT).show();
         }
     }
 

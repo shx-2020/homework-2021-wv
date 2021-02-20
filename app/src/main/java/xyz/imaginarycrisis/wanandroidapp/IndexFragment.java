@@ -42,6 +42,7 @@ public class IndexFragment extends Fragment {
         }
     };
     private EditText page_et;
+    private boolean firstLoading = true;
 
     /**
      * Default params
@@ -135,11 +136,13 @@ public class IndexFragment extends Fragment {
             dataList.clear();
             dataList.addAll(ArticleData.getIndexArticlesDataFromJson(responseData));
             adapter.notifyDataSetChanged();
-            Toast.makeText(getContext(), "跳转完成\n第" + currentPage + "页", Toast.LENGTH_LONG).show();
+            if(!firstLoading)
+                Toast.makeText(getContext(), "跳转完成\n第" + currentPage + "页", Toast.LENGTH_SHORT).show();
+            else{firstLoading=false;}
         }
         else{
             Toast.makeText(getContext(),"错误！\n错误代码："+ ArticleData.getErrorCode(responseData)+
-                    "\n错误信息："+ ArticleData.getErrorMsg(responseData),Toast.LENGTH_LONG).show();
+                    "\n错误信息："+ ArticleData.getErrorMsg(responseData),Toast.LENGTH_SHORT).show();
         }
     }
 

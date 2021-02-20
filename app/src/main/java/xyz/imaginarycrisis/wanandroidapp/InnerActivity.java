@@ -37,7 +37,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdapter.MyOnClickListener{
+public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdapter.MyOnClickListener,MyItemInterface{
 
     //===对象声明===
     //数据对象：
@@ -254,20 +254,113 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
                 }
         ).run();
     }
-    private void doAfterArticlePushRequestDone(String jsonData){
+    private void doAfterArticlePushRequestDone(String jsonData) {
         int errorCode = -99;
         String errorMsg = "默认消息";
-        try{
+        try {
             JSONObject jsonObject = new JSONObject(jsonData);
             errorCode = jsonObject.getInt("errorCode");
             errorMsg = jsonObject.getString("errorMsg");
-        }catch (Exception e){e.printStackTrace();}
-        if(errorCode == 0){
-            Toast.makeText(InnerActivity.this,"提交成功", LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else{
-            Toast.makeText(InnerActivity.this,"提交失败！\n错误"+errorCode+"（"+errorMsg+"）",LENGTH_SHORT).show();
+        if (errorCode == 0) {
+            Toast.makeText(InnerActivity.this, "提交成功", LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(InnerActivity.this, "提交失败！\n错误" + errorCode + "（" + errorMsg + "）", LENGTH_SHORT).show();
         }
     }
+    @SuppressLint("HandlerLeak")
+    private final Handler addDocumentHandler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            handleResponseDataOfAddDocumentMethod((String)msg.obj);
+        }
+    };
+
+    @Override
+    public void addInSiteArticle(int id) {
+        new Thread(
+                () -> {
+                    try {
+                        URL url = new URL("https://www.wanandroid.com/lg/collect/" + id + "/json");
+                        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                        for (int i = 0; i < cookieList.size(); i++) {
+                            conn.addRequestProperty("Cookie", cookieList.get(i));
+                        }
+                        conn.setDoOutput(true);
+                        conn.setDoInput(true);
+                        conn.setReadTimeout(8000);
+                        conn.setConnectTimeout(8000);
+                        conn.setRequestMethod("POST");
+                        conn.connect();
+                        InputStream in = conn.getInputStream();
+                        String responseData = Tools.streamToString(in);
+                        Message msg = new Message();
+                        msg.obj = responseData;
+                        addDocumentHandler.sendMessage(msg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        ).start();
+    }
+
+    @Override
+    public void addBeyondSiteArticle(String title, String author, String link) {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("title",title);
+        params.put("author",author);
+        params.put("link",link);
+        new Thread(
+                () -> {
+                    try {
+                        URL url = new URL("https://www.wanandroid.com/lg/collect/add/json");
+                        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                        for (int i = 0; i < cookieList.size(); i++) {
+                            conn.addRequestProperty("Cookie", cookieList.get(i));
+                        }
+                        conn.setDoOutput(true);
+                        conn.setDoInput(true);
+                        conn.setReadTimeout(8000);
+                        conn.setConnectTimeout(8000);
+                        conn.setRequestMethod("POST");
+                        conn.connect();
+                        StringBuilder dataToWrite = new StringBuilder();
+                        for(String key:params.keySet()){
+                            dataToWrite.append(key).append("=").append(params.get(key)).append("&");
+                        }
+                        OutputStream out = conn.getOutputStream();
+                        out.write(dataToWrite.substring(0,dataToWrite.length()-1).getBytes());
+                        InputStream in = conn.getInputStream();
+                        String responseData = Tools.streamToString(in);
+                        Message msg = new Message();
+                        msg.obj = responseData;
+                        addDocumentHandler.sendMessage(msg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        ).start();
+    }
+
+    private void handleResponseDataOfAddDocumentMethod(String json){
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            int errorCode = jsonObject.getInt("errorCode");
+            String errorMsg = jsonObject.getString("errorMsg");
+
+            if(errorCode == 0){
+                Toast.makeText(InnerActivity.this,"收藏添加成功！",LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(
+                        InnerActivity.this,"收藏添加失败！\n错误："+errorCode+"（"+errorMsg+"）"
+                        ,LENGTH_SHORT).show();
+            }
+        }catch (Exception e){e.printStackTrace();}
+    }
+
 
 }

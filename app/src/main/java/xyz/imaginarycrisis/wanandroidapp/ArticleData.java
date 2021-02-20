@@ -11,13 +11,19 @@ import java.util.List;
 public class ArticleData {
     public ArticleData(){return;}
 
-    public ArticleData(String author, String shareUser, String title, String url, String niceShareDate, String niceDate, String chapterName, String superChapterName){
+    public ArticleData(String author, String shareUser, String title, String url, String niceShareDate, String niceDate, String chapterName, String superChapterName,int id){
         this.author = author;this.shareUser = shareUser;this.title = title;
         this.url = url; this.niceShareDate = niceShareDate;this.niceDate = niceDate;
         this.chapterName = chapterName;this.superChapterName = superChapterName;
+        this.id=id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     private String author,shareUser,title,url,niceDate,chapterName,superChapterName,niceShareDate;
+    private int id;
 
     public String getAuthor() {
         return author;
@@ -92,7 +98,8 @@ public class ArticleData {
                 String url = datas.getJSONObject(i).getString("link");
                 String chapterName = datas.getJSONObject(i).getString("chapterName");
                 String superChapterName = datas.getJSONObject(i).getString("superChapterName");
-                dataList.add(new ArticleData(author,shareUser,title,url,niceShareDate,niceDate,chapterName,superChapterName));
+                int id = datas.getJSONObject(i).getInt("id");
+                dataList.add(new ArticleData(author,shareUser,title,url,niceShareDate,niceDate,chapterName,superChapterName,id));
             }
         } catch (Exception e) {
             e.printStackTrace();

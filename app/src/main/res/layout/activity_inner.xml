@@ -34,7 +34,7 @@
     </LinearLayout>
     <!--侧滑界面,必须设置layout_gravity属性,表示侧滑方向-->
     <LinearLayout
-        android:elevation="3dp"
+        android:elevation="300dp"
         android:layout_gravity="start"
         android:id="@+id/ll"
         android:background="@android:color/background_light"

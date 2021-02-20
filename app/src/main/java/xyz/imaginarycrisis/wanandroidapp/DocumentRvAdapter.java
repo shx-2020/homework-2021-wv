@@ -4,27 +4,26 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-class   IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    private List<ArticleData> dataList;
+public class DocumentRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private List<DocumentArticleData> dataList;
     private Context context;
 
     public static final int COMMON_ITEM = 1;
-    public static final int HEAD_ITEM = 2;
-    private MyItemInterface myItemInterface;
 
-    IndexRvAdapter(List<ArticleData> dataList, Context context){
+    DocumentRvAdapter(List<DocumentArticleData> dataList, Context context){
         this.dataList = dataList;
         this.context = context;
-        myItemInterface = (MyItemInterface)context;
     }
 
     @Override
@@ -32,40 +31,30 @@ class   IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         LayoutInflater mInflater = LayoutInflater.from(context);
         RecyclerView.ViewHolder holder = null;
         if(COMMON_ITEM == viewType){
-            View v = mInflater.inflate(R.layout.article_rv_item,parent,false);
-            holder = new CommonViewHolder(v);
-        }else{
-            View v = mInflater.inflate(R.layout.index_head,parent,false);
-            holder = new HeadViewHolder(v);
+            View view = mInflater.inflate(R.layout.article_rv_item,parent,false);
+            holder = new CommonViewHolder(view);
         }
         return holder;
     }
 
-    private void addFav(int id){
-        myItemInterface.addInSiteArticle(id);
-    }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof CommonViewHolder){
-            ((CommonViewHolder)holder).titleTv.setText(dataList.get(position).getTitle());
-            ((CommonViewHolder)holder).authorOrShareUserTv.setText(dataList.get(position).getAuthorOrShareUser());
-            ((CommonViewHolder)holder).tagTv.setText(dataList.get(position).getTag());
-            ((CommonViewHolder)holder).timeTv.setText(dataList.get(position).getTime());
-            ((CommonViewHolder)holder).layout.setOnClickListener(v -> {
-                WebViewActivity.actStart(context,dataList.get(position).getUrl(),dataList.get(position).getTitle());
+        if(holder instanceof DocumentRvAdapter.CommonViewHolder){
+            ((DocumentRvAdapter.CommonViewHolder)holder).titleTv.setText(dataList.get(position).getTitle());
+            ((DocumentRvAdapter.CommonViewHolder)holder).authorOrShareUserTv.setText(dataList.get(position).getAuthor());
+            ((DocumentRvAdapter.CommonViewHolder)holder).tagTv.setText(dataList.get(position).getChapterName());
+            ((DocumentRvAdapter.CommonViewHolder)holder).timeTv.setText(dataList.get(position).getNiceDate());
+            ((DocumentRvAdapter.CommonViewHolder)holder).layout.setOnClickListener(v -> {
+                WebViewActivity.actStart(context,dataList.get(position).getLink(),dataList.get(position).getTitle());
             });
-            ((CommonViewHolder)holder).favBtn.setOnClickListener(v -> addFav(dataList.get(position).getId()));
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position == 0){
-            return HEAD_ITEM;
-        }else{
-            return COMMON_ITEM;
-        }
+        return COMMON_ITEM;
     }
 
     @Override
@@ -80,6 +69,7 @@ class   IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         TextView timeTv;
         ImageButton favBtn;
         LinearLayout layout;
+
         public CommonViewHolder(View itemView) {
             super(itemView);
             titleTv = itemView.findViewById(R.id.rv_title);
@@ -90,11 +80,4 @@ class   IndexRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             layout = itemView.findViewById(R.id.pop_lay);
         }
     }
-
-    class HeadViewHolder extends RecyclerView.ViewHolder{
-        public HeadViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
 }

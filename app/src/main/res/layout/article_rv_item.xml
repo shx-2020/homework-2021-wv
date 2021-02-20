@@ -96,11 +96,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"/>
                         <ImageButton
+                            android:background="@drawable/ripple_pop"
+                            android:elevation="5dp"
                             android:id="@+id/fav_btn"
-                            android:background="@android:color/transparent"
-                            android:src="@drawable/ic_baseline_favorite_border_24"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:src="@drawable/star_image"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"/>
                     </LinearLayout>
 
 
