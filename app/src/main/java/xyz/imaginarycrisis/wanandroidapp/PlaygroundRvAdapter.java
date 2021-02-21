@@ -23,11 +23,13 @@ class PlaygroundRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private MyOnClickListener myOnClickListener;
     public static final int COMMON_ITEM = 1;
     public static final int HEAD_ITEM = 2;
+    private MyPlaygroundInterface myPlaygroundInterface;
 
     PlaygroundRvAdapter(List<ArticleData> dataList, Context context){
         this.dataList = dataList;
         this.context = context;
         myOnClickListener = (MyOnClickListener)context;
+        myPlaygroundInterface = (MyPlaygroundInterface) context;
     }
 
     @Override
@@ -44,8 +46,8 @@ class PlaygroundRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return holder;
     }
 
-    private void addFav(){
-        Toast.makeText(context,"你点击了收藏按钮",Toast.LENGTH_SHORT).show();
+    private void addDocument(int id){
+        myPlaygroundInterface.addDocument(id);
     }
 
     @Override
@@ -58,7 +60,7 @@ class PlaygroundRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ((CommonViewHolder)holder).layout.setOnClickListener(v -> {
                 WebViewActivity.actStart(context,dataList.get(position).getUrl(),dataList.get(position).getTitle());
             });
-            ((CommonViewHolder)holder).favBtn.setOnClickListener(v -> addFav());
+            ((CommonViewHolder)holder).favBtn.setOnClickListener(v -> addDocument(dataList.get(position).getId()));
         }else {
             ((HeadViewHolder)holder).articlePushTv.setOnClickListener(v->{
                 pushArticle();
@@ -80,7 +82,7 @@ class PlaygroundRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return dataList.size();
     }
 
-    class CommonViewHolder extends RecyclerView.ViewHolder{
+    static class CommonViewHolder extends RecyclerView.ViewHolder{
         TextView titleTv;
         TextView authorOrShareUserTv;
         TextView tagTv;

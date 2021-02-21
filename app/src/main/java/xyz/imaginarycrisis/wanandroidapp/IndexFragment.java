@@ -8,45 +8,37 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.os.Message;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.Toast;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.net.ssl.HttpsURLConnection;
 
 
 public class IndexFragment extends Fragment {
-    private int currentPage = 1,currentPageCache = 1;
-    private RecyclerView rv;
-    private IndexRvAdapter adapter;
-    private List<ArticleData> dataList;
-    private String responseData;
-    @SuppressLint("HandlerLeak")
-    private final Handler mHandler = new Handler(){
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            responseData = (String)msg.obj;
-            doAfterRequestDone();
-        }
-    };
-    private EditText page_et;
-    private boolean firstLoading = true;
+
 
     /**
-     * Default params
+     * 数据、adapter
      */
+    private int bottomPage;
+    private List<ArticleData> articleDataList;
+    private IndexRvAdapter adapter;
+    /**
+     * 控件
+     */
+    private RecyclerView recyclerView;
+    private View view0;
+    private boolean firstStart = true;
+
+
+    //=========自动生成============
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -66,127 +58,116 @@ public class IndexFragment extends Fragment {
         return fragment;
     }
 
+    //=============================
+
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        if(firstStart) {
+            bottomPage = 1;
+            articleDataList = new ArrayList<>();
+            adapter = new IndexRvAdapter(articleDataList, getContext());
         }
+        super.onCreate(savedInstanceState);
     }
 
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_index, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if(view0 == null)
+            view0 = inflater.inflate(R.layout.fragment_index, container, false);
+        View view = view0;
+        return view;
     }
 
-    private void init(){
-        dataList = new ArrayList<>();
-        rv = getView().findViewById(R.id.index_rv);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        adapter = new IndexRvAdapter(dataList,getContext());
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(layoutManager);
-        adapter.notifyDataSetChanged();
-        page_et = getView().findViewById(R.id.index_page_et);
-
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        init();
-        requestData();
-        setupListener();
-    }
-
-    private void requestData(){
-        new Thread(
-                ()->
-                {
-                    try {
-                        URL url = new URL("https://www.wanandroid.com/article/list/"+(currentPage-1)+"/json");
-                        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-                        connection.setDoInput(true);
-                        connection.setReadTimeout(8000);
-                        connection.setConnectTimeout(8000);
-                        connection.connect();
-                        InputStream in = connection.getInputStream();
-                        String responseData = Tools.streamToString(in);
-                        Message msg = new Message();
-                        msg.obj = responseData;
-                        mHandler.sendMessage(msg);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-        ).start();
-    }
-
-    private void doAfterRequestDone(){
-        if(ArticleData.getErrorCode(responseData)==0) {
-            if(ArticleData.getIndexArticlesDataFromJson(responseData).isEmpty()){
-                Toast.makeText(getContext(),"错误！\n该页无法找到任何文章",Toast.LENGTH_SHORT).show();
-                currentPage = currentPageCache;
-                return;
-            }
-            dataList.clear();
-            dataList.addAll(ArticleData.getIndexArticlesDataFromJson(responseData));
-            adapter.notifyDataSetChanged();
-            if(!firstLoading)
-                Toast.makeText(getContext(), "跳转完成\n第" + currentPage + "页", Toast.LENGTH_SHORT).show();
-            else{firstLoading=false;}
-        }
-        else{
-            Toast.makeText(getContext(),"错误！\n错误代码："+ ArticleData.getErrorCode(responseData)+
-                    "\n错误信息："+ ArticleData.getErrorMsg(responseData),Toast.LENGTH_SHORT).show();
+        if(firstStart) {
+            recyclerView = getView().findViewById(R.id.index_rv);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
     }
 
-    private boolean isNumber(char c){
-        boolean cIsNumberChar = false;
-        for(int i=0;i<9;i++){
-            if(Integer.valueOf(c)==i){
-                cIsNumberChar = true;
-                break;
-            }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(firstStart) {
+            setupScrollListener();
+            requestData(bottomPage);
         }
-        return cIsNumberChar;
+        firstStart = false;
     }
 
-    private boolean containsNonNumber(String s){
-        for(int i=0;i<s.length();i++){
-            if (!isNumber(s.charAt(i)))
-                return true;
-        }
-        return false;
-    }
+    /**
+     * 设置recyclerView滑动到底部刷新刷新的功能
+     */
+    private void setupScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int lastPosition = -1;
 
-    private void setupListener(){
-        page_et.setImeOptions(EditorInfo.IME_ACTION_GO);
-        page_et.setOnEditorActionListener((v, actionId, event) -> {
-            if(actionId == EditorInfo.IME_ACTION_GO || (event!=null&&event.getKeyCode()==KeyEvent.KEYCODE_ENTER)){
-                String etContent = page_et.getText().toString();
-                etContent.replace('\n','\0');
-                if (!containsNonNumber(etContent))
-                    Toast.makeText(getContext(),"请输入数字",Toast.LENGTH_SHORT).show();
-                else {
-                    if(Integer.parseInt(etContent) ==0)
-                        Toast.makeText(getContext(),"第0页不存在。",Toast.LENGTH_SHORT).show();
-                    else{
-                        currentPageCache = currentPage;
-                        currentPage = Integer.parseInt(etContent);
-                        requestData();
-                        return true;
+                //当前状态为停止滑动状态SCROLL_STATE_IDLE时
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    if (layoutManager instanceof LinearLayoutManager) {
+                        lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
                     }
                 }
 
+                //时判断界面显示的最后item的position是否等于itemCount总数-1也就是最后一个item的position
+                //如果相等则说明已经滑动到最后了
+                if (lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
+                    requestData(++bottomPage);
+                }
             }
-
-            return false;
         });
     }
+
+    /**
+     * 网络请求相关
+     * mHandler、requestData方法
+     */
+
+    @SuppressLint("HandlerLeak")
+    private final Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            //处理子线程获得的数据
+            String tResponseData = (String)msg.obj;
+            List<ArticleData> tDataList = ArticleData.getIndexArticlesDataFromJson(tResponseData);
+            articleDataList.addAll(tDataList);
+            adapter.notifyDataSetChanged();
+        }
+    };
+
+    private void requestData(int pg){
+        Runnable requestRunnable = () -> {
+            try{
+                URL url = new URL("https://www.wanandroid.com/article/list/"+(pg-1)+"/json");
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                conn.setDoInput(true);
+                conn.setRequestMethod("GET");
+                conn.setReadTimeout(8000);
+                conn.setConnectTimeout(8000);
+                conn.connect();
+                InputStream in = conn.getInputStream();
+                String responseData = Tools.streamToString(in);
+                Message msg = new Message();
+                msg.obj = responseData;
+                mHandler.sendMessage(msg);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        };
+        new Thread(requestRunnable).start();
+    }
+
+
 }

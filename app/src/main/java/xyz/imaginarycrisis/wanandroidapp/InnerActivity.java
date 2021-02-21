@@ -10,7 +10,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.util.Log;
-import android.view.View;
+import android.view.KeyEvent;
+import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,25 +38,26 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdapter.MyOnClickListener,MyItemInterface{
+public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdapter.MyOnClickListener,MyItemInterface,MyPlaygroundInterface{
 
-    //===对象声明===
-    //数据对象：
+    /**
+     * 属性、数据
+     */
     DecodedLoginData loginData;
-    //控件对象：
+    private List<String>cookieList = new ArrayList<>();
+    /**
+     * 控件
+     */
     TextView tvDrawerId,tvDrawerCoinCount,tvDocumentEntrance,tvAboutEntrance,tvNickName;
     ImageButton avatarButton;
-    //特别：ViewPager和NavigationView相关
     BottomNavigationView navigation;
-
     MyViewPager viewPager;
-    //设置自定的MyViewPager类型控件，主要是为了实现viewpager不可以直接滑动、只能按钮切换的效果
-    //（至于为什么，还要为fragment里面的tabLayout让路，不然会发生滑动手势的冲突）
-
     List<Fragment> fragmentList;
 
-    private List<String>cookieList = new ArrayList<>();
 
+    /**
+     * 回调
+     */
     @SuppressLint("HandlerLeak")
     private final Handler pushHandler = new Handler(){
         public void handleMessage(@NonNull Message msg) {
@@ -65,8 +67,7 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
 
         }
     };
-
-    View.OnClickListener backBtnListener = v->{
+    private OnClickListener backBtnListener = v->{
         AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(this);
         normalDialog.setIcon(R.drawable.ic_baseline_sick_24);
@@ -81,8 +82,15 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
         });
         normalDialog.show();
     };
+    private final OnClickListener refreshBtnListener = v->{
+        InnerActivity.actStart(InnerActivity.this,loginData,cookieList);
+        finish();
+    };
 
 
+    /**
+     * onCreate
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,8 +102,9 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
 
     }
 
-
-    //方法：开始活动
+    /**
+     * 隐式启动活动
+     */
     public static void actStart(Context context, DecodedLoginData loginData,List<String> cookieList){
         Intent intent = new Intent(context,InnerActivity.class);
 
@@ -109,31 +118,35 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
         context.startActivity(intent);
     }
 
-
+    /**
+     * 从intent中获得数据
+     */
     private void getData(){
         //从bundle获得hashMap，再从hashMap获得loginData
         Intent intent = getIntent();
-        Bundle bundle = (Bundle)intent.getExtras();
+        Bundle bundle = intent.getExtras();
         HashMap<String,DecodedLoginData> hashMap = (HashMap<String, DecodedLoginData>) bundle.get("dataInMap");
-        loginData = (DecodedLoginData) hashMap.get("data");
+        loginData =  hashMap.get("data");
         cookieList = (List<String>)hashMap.get("cookieList");
     }
 
-    //===初始化控件===
-    //入口：
+    /**
+     * 初始化控件
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initViews(){
-
-        //---顶部导航---
         Tools.setupTopBarViews(this,"玩Android",R.id.inner_top_view_bar_layout,
-                false,backBtnListener,true,null,
+                false,backBtnListener,false,refreshBtnListener,
                 R.color.sea_green,false);
-        //------
+        //使用自定的义顶部工具栏
         initTextViews();
         initImageButton();
         initNavigationAndViewPager();
     }
-    //初始化TextView控件：
+
+    /**
+     * TextView
+     */
     @SuppressLint("SetTextI18n")
     private void initTextViews(){
         tvDrawerId = findViewById(R.id.drawer_info_id);
@@ -149,22 +162,29 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
         tvDocumentEntrance.setOnClickListener(v -> DocumentActivity.actStart(InnerActivity.this,cookieList));
         tvAboutEntrance.setOnClickListener(v-> AboutPage.actStart(InnerActivity.this));
     }
-    //初始化ImageButton：
+
+    /**
+     * imageButton
+     */
     private void initImageButton(){
         avatarButton = findViewById(R.id.innerAvatarImageButton);
         avatarButton.setOnClickListener(v->DetailedInfo.actStart(this,loginData));
     }
-    //初始化ViewPager和BottomNavigationView：
+
+    /**
+     * viewpager和bottomNavigationView
+     */
     private void initNavigationAndViewPager(){
 
-        navigation=(BottomNavigationView) findViewById(R.id.inner_bnv);
-        viewPager=(MyViewPager) findViewById(R.id.inner_main_viewpager);
+        navigation=findViewById(R.id.inner_bnv);
+        viewPager=findViewById(R.id.inner_main_viewpager);
+        NavHelper.disableShiftMode(navigation);
 
         //初始化添加fragment
         fragmentList = new ArrayList<>();
         fragmentList.add(new IndexFragment());
         fragmentList.add(new PlaygroundFragment());
-        fragmentList.add(new SystemFragment());
+        fragmentList.add(new TreeFragment());
         fragmentList.add(new NaviFragment());
         fragmentList.add(new ArticleFragment());
 
@@ -204,17 +224,19 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
 
             @Override
             public void onPageSelected(int position) {
-
+                navigation.getMenu().getItem(position).setChecked(true);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
     }
 
+    /**
+     * PlaygroundFragment中rv控件的adapter调动的接口里的方法
+     */
 
     @Override
     public void requestArticlePush(String title, String link) {
@@ -252,8 +274,12 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
                         Log.e("sys","connection error");
                     }
                 }
-        ).run();
+        ).start();
     }
+
+    /**
+     * 接口调用后handler调用的方法，用于处理服务器返回的信息，检查是否提交成功
+     */
     private void doAfterArticlePushRequestDone(String jsonData) {
         int errorCode = -99;
         String errorMsg = "默认消息";
@@ -307,6 +333,10 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
         ).start();
     }
 
+    /**
+     * 添加站外文章收藏
+     * 写了但是还没添加这个功能
+     */
     @Override
     public void addBeyondSiteArticle(String title, String author, String link) {
         HashMap<String,String> params = new HashMap<>();
@@ -363,4 +393,47 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
     }
 
 
+    private long exitTime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+            if((System.currentTimeMillis()-exitTime) > 2000){
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void addDocument(int id) {
+        new Thread(
+                () -> {
+                    try {
+                        URL url = new URL("https://www.wanandroid.com/lg/collect/" + id + "/json");
+                        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                        for (int i = 0; i < cookieList.size(); i++) {
+                            conn.addRequestProperty("Cookie", cookieList.get(i));
+                        }
+                        conn.setDoOutput(true);
+                        conn.setDoInput(true);
+                        conn.setReadTimeout(8000);
+                        conn.setConnectTimeout(8000);
+                        conn.setRequestMethod("POST");
+                        conn.connect();
+                        InputStream in = conn.getInputStream();
+                        String responseData = Tools.streamToString(in);
+                        Message msg = new Message();
+                        msg.obj = responseData;
+                        addDocumentHandler.sendMessage(msg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        ).start();
+    }
 }

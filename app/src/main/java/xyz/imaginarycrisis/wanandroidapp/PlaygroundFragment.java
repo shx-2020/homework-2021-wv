@@ -38,40 +38,32 @@ public class PlaygroundFragment extends Fragment{
     private RecyclerView rv;
     private PlaygroundRvAdapter adapter;
     private List<ArticleData> dataList;
-    private String responseData;
+
     @SuppressLint("HandlerLeak")
     private final Handler mHandler = new Handler(){
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            responseData = (String)msg.obj;
-            doAfterRequestDone();
+
+            String tResponseData = (String)msg.obj;
+            List<ArticleData> tDataList = ArticleData.getIndexArticlesDataFromJson(tResponseData);
+            dataList.addAll(tDataList);
+            adapter.notifyDataSetChanged();
+
         }
     };
-    private EditText page_et;
-    private boolean firstLoading = true;
+    private boolean firstStart = true;
+    private View view0;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    /**
+     * ====================
+     */
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     public PlaygroundFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PlaygroundFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static PlaygroundFragment newInstance(String param1, String param2) {
         PlaygroundFragment fragment = new PlaygroundFragment();
         Bundle args = new Bundle();
@@ -80,6 +72,10 @@ public class PlaygroundFragment extends Fragment{
         fragment.setArguments(args);
         return fragment;
     }
+
+    /**
+     *=======================
+     */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,8 +89,9 @@ public class PlaygroundFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_playground, container, false);
+        if(view0 == null){
+            view0 = inflater.inflate(R.layout.fragment_playground, container, false);}
+        return view0;
     }
     private void init(){
         dataList = new ArrayList<>();
@@ -104,15 +101,17 @@ public class PlaygroundFragment extends Fragment{
         rv.setAdapter(adapter);
         rv.setLayoutManager(layoutManager);
         adapter.notifyDataSetChanged();
-        page_et = getView().findViewById(R.id.playground_et);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        init();
-        requestData();
-        setupListener();
+        if(firstStart) {
+            init();
+            requestData();
+            setupScrollListener();
+            firstStart = false;
+        }
     }
 
     private void requestData(){
@@ -139,67 +138,29 @@ public class PlaygroundFragment extends Fragment{
         ).start();
     }
 
-    private void doAfterRequestDone(){
-        if (ArticleData.getErrorCode(responseData) == 0) {
-            if (ArticleData.getIndexArticlesDataFromJson(responseData).isEmpty()) {
-                Toast.makeText(getContext(), "广场\n错误！\n该页无法找到任何文章", LENGTH_SHORT).show();
-                currentPage = currentPageCache;
-                return;
-            }
-            dataList.clear();
-            dataList.addAll(ArticleData.getIndexArticlesDataFromJson(responseData));
-            adapter.notifyDataSetChanged();
-            if(!firstLoading)
-                Toast.makeText(getContext(), "广场\n跳转完成\n第" + currentPage + "页", LENGTH_SHORT).show();
-            else
-                firstLoading=false;
-        } else {
-            Toast.makeText(getContext(), "广场\n错误！\n错误代码：" + ArticleData.getErrorCode(responseData) +
-                    "\n错误信息：" + ArticleData.getErrorMsg(responseData), LENGTH_SHORT).show();
-        }
-    }
+    private void setupScrollListener() {
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int lastPosition = -1;
 
-    private boolean isNumber(char c){
-        boolean cIsNumberChar = false;
-        for(int i=0;i<9;i++){
-            if(Integer.valueOf(c)==i){
-                cIsNumberChar = true;
-                break;
-            }
-        }
-        return cIsNumberChar;
-    }
-
-    private boolean containsNonNumber(String s){
-        for(int i=0;i<s.length();i++){
-            if (!isNumber(s.charAt(i)))
-                return true;
-        }
-        return false;
-    }
-
-    private void setupListener(){
-        page_et.setImeOptions(EditorInfo.IME_ACTION_GO);
-        page_et.setOnEditorActionListener((v, actionId, event) -> {
-            if(actionId == EditorInfo.IME_ACTION_GO || (event!=null&&event.getKeyCode()== KeyEvent.KEYCODE_ENTER)){
-                String etContent = page_et.getText().toString();
-                etContent.replace('\n','\0');
-                if (!containsNonNumber(etContent))
-                    Toast.makeText(getContext(),"请输入数字", LENGTH_SHORT).show();
-                else {
-                    if(Integer.parseInt(etContent) ==0)
-                        Toast.makeText(getContext(),"第0页不存在。", LENGTH_SHORT).show();
-                    else{
-                        currentPageCache = currentPage;
-                        currentPage = Integer.parseInt(etContent);
-                        requestData();
-                        return true;
+                //当前状态为停止滑动状态SCROLL_STATE_IDLE时
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    if (layoutManager instanceof LinearLayoutManager) {
+                        lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
                     }
                 }
 
+                //时判断界面显示的最后item的position是否等于itemCount总数-1也就是最后一个item的position
+                //如果相等则说明已经滑动到最后了
+                if (lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
+                    ++currentPage;
+                    requestData();
+                }
             }
-
-            return false;
         });
     }
+
 }

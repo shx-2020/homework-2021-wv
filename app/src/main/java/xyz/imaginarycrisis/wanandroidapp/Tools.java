@@ -26,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class
 
@@ -119,7 +120,5 @@ Tools {
         layout.setBackgroundColor(activity.getResources().getColor(bgColorId));
         titleTv.setFocusable(true);
     }
-
-
 
 }

@@ -14,13 +14,24 @@ import android.view.ViewGroup;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
 
 
 
-public class SystemFragment extends Fragment {
+public class TreeFragment extends Fragment {
+
+    /**
+     * 数据
+     */
+    private int cid=1,currentPage=1;
+    private List<ArticleData> dataList;
+
+    /**
+     * 回调
+     */
     @SuppressLint("HandlerLeak")
     private Handler treeHandler = new Handler(){
         public void handleMessage(@NonNull Message msg) {
@@ -35,26 +46,35 @@ public class SystemFragment extends Fragment {
         }
     };
 
-    private int cid=1,currentPage=1;
 
+
+    /**
+     * ====================
+     */
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
     private String mParam2;
 
-    public SystemFragment() {
+    public TreeFragment() {
         // Required empty public constructor
     }
 
-    public static SystemFragment newInstance(String param1, String param2) {
-        SystemFragment fragment = new SystemFragment();
+    public static TreeFragment newInstance(String param1, String param2) {
+        TreeFragment fragment = new TreeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
+
+    /**
+     * =====================
+     */
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +89,7 @@ public class SystemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_system, container, false);
+        return inflater.inflate(R.layout.fragment_tree, container, false);
     }
 
     private void requestTreeData(){

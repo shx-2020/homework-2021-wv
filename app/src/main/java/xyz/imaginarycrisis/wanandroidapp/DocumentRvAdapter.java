@@ -4,13 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -18,12 +14,14 @@ import java.util.List;
 public class DocumentRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<DocumentArticleData> dataList;
     private Context context;
+    MyDocumentInterface myDocumentInterface;
 
     public static final int COMMON_ITEM = 1;
 
     DocumentRvAdapter(List<DocumentArticleData> dataList, Context context){
         this.dataList = dataList;
         this.context = context;
+        myDocumentInterface = (MyDocumentInterface)context;
     }
 
     @Override
@@ -42,13 +40,14 @@ public class DocumentRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof DocumentRvAdapter.CommonViewHolder){
-            ((DocumentRvAdapter.CommonViewHolder)holder).titleTv.setText(dataList.get(position).getTitle());
-            ((DocumentRvAdapter.CommonViewHolder)holder).authorOrShareUserTv.setText(dataList.get(position).getAuthor());
-            ((DocumentRvAdapter.CommonViewHolder)holder).tagTv.setText(dataList.get(position).getChapterName());
-            ((DocumentRvAdapter.CommonViewHolder)holder).timeTv.setText(dataList.get(position).getNiceDate());
-            ((DocumentRvAdapter.CommonViewHolder)holder).layout.setOnClickListener(v -> {
+            ((CommonViewHolder)holder).titleTv.setText(dataList.get(position).getTitle());
+            ((CommonViewHolder)holder).authorOrShareUserTv.setText(dataList.get(position).getAuthor());
+            ((CommonViewHolder)holder).tagTv.setText(dataList.get(position).getChapterName());
+            ((CommonViewHolder)holder).timeTv.setText(dataList.get(position).getNiceDate());
+            ((CommonViewHolder)holder).layout.setOnClickListener(v -> {
                 WebViewActivity.actStart(context,dataList.get(position).getLink(),dataList.get(position).getTitle());
             });
+            ((CommonViewHolder)holder).favBtn.setOnClickListener(v->myDocumentInterface.deleteDocument(dataList.get(position).getId()));
         }
     }
 

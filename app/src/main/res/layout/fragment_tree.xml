@@ -5,13 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SystemFragment">
+    tools:context=".TreeFragment">
 
     <LinearLayout
         android:background="#F5F5F5"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -23,12 +23,19 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"/>
                 <TextView
                     android:text="一级标签"
                     android:ems="1"
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"/>
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"/>
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/sys_rv1"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -70,13 +77,20 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"/>
                 <TextView
                     android:text="二级标签"
                     android:ems="1"
                     android:layout_width="20dp"
                     android:layout_height="wrap_content"/>
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"/>
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/sys_rv2"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -88,8 +102,13 @@
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="5dp"/>
+                android:layout_height="10dp"/>
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sys_rv3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
 </LinearLayout>
