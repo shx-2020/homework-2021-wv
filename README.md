@@ -4,6 +4,14 @@
 
 ##  项目内容计划
 总计划：实现一个玩android的app<br>
+
+##简述
+虽然本App功能较为简单（基本上就是一个在线的连接、文章的管理器），奈何第一次做这种比较正式的工程，写十分钟代码修一小时BUG，目前尚未完工。目前写完了的版块为注册页面、登陆页面的、个人详情页面、关于页面、收藏页面的Activity，以及登陆页面的首页、广场Fragment，剩下三个体系Fragment（TreeFragment）、导航Fragment（NavigationFragment）、文章Fragment尚未完工
+
+##使用：
+见流程图
+
+
 ### TODO：
 * - [x] 登陆页面
 * - [x] 注册页面

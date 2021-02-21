@@ -38,7 +38,13 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdapter.MyOnClickListener,MyItemInterface,MyPlaygroundInterface{
+public class InnerActivity extends AppCompatActivity
+        implements
+        PlaygroundRvAdapter.MyOnClickListener,
+        MyItemInterface,
+        MyPlaygroundInterface,
+        MyTreeInterface
+{
 
     /**
      * 属性、数据
@@ -435,5 +441,10 @@ public class InnerActivity extends AppCompatActivity implements PlaygroundRvAdap
                     }
                 }
         ).start();
+    }
+
+    @Override
+    public void getSecondaryChapterList(int id) {
+
     }
 }

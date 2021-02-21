@@ -35,7 +35,7 @@
                     android:layout_width="10dp"
                     android:layout_height="0dp"/>
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/sys_rv1"
+                        android:id="@+id/tree_rv_tag1"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -90,7 +90,7 @@
                     android:layout_height="0dp"/>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/sys_rv2"
+                        android:id="@+id/tree_rv_tag2"
                         android:layout_weight="1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -106,7 +106,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/sys_rv3"
+            android:id="@+id/tree_rv_article"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>

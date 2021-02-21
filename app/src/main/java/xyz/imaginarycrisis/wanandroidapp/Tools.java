@@ -120,5 +120,4 @@ Tools {
         layout.setBackgroundColor(activity.getResources().getColor(bgColorId));
         titleTv.setFocusable(true);
     }
-
 }
