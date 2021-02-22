@@ -31,6 +31,7 @@ import java.util.List;
 public class
 
 Tools {
+
     public static void setWindowStatusBarColor(Activity activity, int colorResId) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

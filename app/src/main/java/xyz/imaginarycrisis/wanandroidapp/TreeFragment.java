@@ -174,6 +174,7 @@ public class TreeFragment extends Fragment {
         if(firstRun){
             rvArticle.setAdapter(articleAdapter);
             rvArticle.setLayoutManager(articleLayoutManager);
+            setupScrollListener();
             articleAdapter.notifyDataSetChanged();
 
             rvTag1.setAdapter(priAdapter);
@@ -294,6 +295,7 @@ public class TreeFragment extends Fragment {
         if((priTagIndex==this.priTagIndex)&&(secTagIndex==this.secTagIndex)){
             return;
         }else {
+            currentPage = 0;
 
             this.priTagIndex = priTagIndex;
             this.secTagIndex = secTagIndex;
@@ -318,5 +320,30 @@ public class TreeFragment extends Fragment {
 
     public int getSecTagIndex() {
         return secTagIndex;
+    }
+
+    private void setupScrollListener() {
+        rvArticle.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int lastPosition = -1;
+
+                //当前状态为停止滑动状态SCROLL_STATE_IDLE时
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    if (layoutManager instanceof LinearLayoutManager) {
+                        lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                    }
+                }
+
+                //时判断界面显示的最后item的position是否等于itemCount总数-1也就是最后一个item的position
+                //如果相等则说明已经滑动到最后了
+                if (lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
+                    ++currentPage;
+                    requestTreeArticle();
+                }
+            }
+        });
     }
 }
