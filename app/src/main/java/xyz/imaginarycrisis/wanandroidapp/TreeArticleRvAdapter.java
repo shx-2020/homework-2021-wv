@@ -16,13 +16,13 @@ import java.util.List;
 public class TreeArticleRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<ArticleData> dataList;
     private Context context;
-    private MyTreeInterface treeInterface;
+    private MyInnerActInterface myInnerActInterface;
     private int TREE_COMMON_VIEW_HOLDER_TYPE = 0;
 
     TreeArticleRvAdapter(List<ArticleData>dataList, Context context){
         this.dataList = dataList;
         this.context = context;
-        this.treeInterface = (MyTreeInterface)context;
+        this.myInnerActInterface = (MyInnerActInterface)context;
     }
 
     @NonNull
@@ -51,7 +51,7 @@ public class TreeArticleRvAdapter extends RecyclerView.Adapter<RecyclerView.View
                     WebViewActivity.actStart(context,data.getUrl(),data.getTitle())
             );
             ((TreeViewHolder) holder).favBtn.setOnClickListener(
-                    v->treeInterface.addDocument(data.getId())
+                    v-> myInnerActInterface.addDocument(data.getId())
             );
         }
     }

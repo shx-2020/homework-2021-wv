@@ -15,12 +15,13 @@
             android:layout_width="3dp"
             android:layout_height="0dp"/>
         <LinearLayout
+            android:clickable="true"
             android:background="@drawable/tag_bg"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <View
-                android:layout_height="3dp"
+                android:layout_height="7dp"
                 android:layout_width="0dp"/>
             <LinearLayout
                 android:id="@+id/tag_wrapping_linear_layout"
@@ -29,22 +30,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <View
-                    android:layout_width="10dp"
+                    android:layout_width="15dp"
                     android:layout_height="0dp"/>
                 <TextView
+                    android:gravity="center"
                     android:textColor="@color/white"
                     android:maxLines="1"
-                    android:textSize="18dp"
+                    android:textSize="10dp"
                     android:id="@+id/tag_text"
                     android:text="标签"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="20dp"/>
                 <View
-                    android:layout_width="10dp"
+                    android:layout_width="15dp"
                     android:layout_height="0dp"/>
             </LinearLayout>
             <View
-                android:layout_height="3dp"
+                android:layout_height="9dp"
                 android:layout_width="0dp"/>
         </LinearLayout>
         <View

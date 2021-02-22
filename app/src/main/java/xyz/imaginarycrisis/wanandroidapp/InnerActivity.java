@@ -43,7 +43,7 @@ public class InnerActivity extends AppCompatActivity
         PlaygroundRvAdapter.MyOnClickListener,
         MyItemInterface,
         MyPlaygroundInterface,
-        MyTreeInterface
+        MyInnerActInterface
 {
 
     /**
@@ -59,6 +59,7 @@ public class InnerActivity extends AppCompatActivity
     BottomNavigationView navigation;
     MyViewPager viewPager;
     List<Fragment> fragmentList;
+    TreeFragment tf;
 
 
     /**
@@ -444,7 +445,17 @@ public class InnerActivity extends AppCompatActivity
     }
 
     @Override
-    public void getSecondaryChapterList(int id) {
+    public void changePrimaryTag(int order) {
+        tf.setCurrentTag(order,0);
+    }
 
+    @Override
+    public void changeSecondaryTag(int order) {
+        tf.setCurrentTag(tf.getPriTagIndex(),order);
+    }
+
+    @Override
+    public void getTreeFragment(TreeFragment tf) {
+        this.tf = tf;
     }
 }

@@ -13,15 +13,15 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.List;
 
 public class PrimaryRvAdapter extends RecyclerView.Adapter<ViewHolder> {
-    private List<PrimaryTagData> dataList;
+    private List<String> dataList;
     private Context context;
-    private MyTreeInterface treeInterface;
+    private MyInnerActInterface treeInterface;
     private int PRIMARY_TAG_COMMON_VIEW_HOLDER_TYPE = 0;
 
-    PrimaryRvAdapter(List<PrimaryTagData>dataList, Context context){
+    PrimaryRvAdapter(List<String>dataList, Context context){
         this.dataList = dataList;
         this.context = context;
-        this.treeInterface = (MyTreeInterface)context;
+        this.treeInterface = (MyInnerActInterface)context;
     }
 
     @NonNull
@@ -39,11 +39,9 @@ public class PrimaryRvAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (holder instanceof PrimaryViewHolder){
-            PrimaryTagData data = dataList.get(position);
-            ((PrimaryViewHolder)holder).tagTextTv.setText(data.getName());
-            ((PrimaryViewHolder)holder).wrappingLinearLayout.setOnClickListener(
-                    v->treeInterface.getSecondaryChapterList(data.getId())
-            );
+            String data = dataList.get(position);
+            ((PrimaryViewHolder)holder).tagTextTv.setText(data);
+            ((PrimaryViewHolder) holder).wrappingLinearLayout.setOnClickListener(v->treeInterface.changePrimaryTag(position));
         }
     }
 
